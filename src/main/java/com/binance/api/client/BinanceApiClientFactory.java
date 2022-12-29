@@ -2,6 +2,7 @@ package com.binance.api.client;
 
 import com.binance.api.client.impl.*;
 import com.binance.api.client.config.BinanceApiConfig;
+import com.binance.api.client.security.ApiCredentials;
 import static com.binance.api.client.impl.BinanceApiServiceGenerator.getSharedClient;
 
 /**
@@ -57,6 +58,16 @@ public class BinanceApiClientFactory {
    */
   public static BinanceApiClientFactory newInstance(String apiKey, String secret) {
     return new BinanceApiClientFactory(apiKey, secret);
+  }
+
+  /**
+   * Create a new instance.
+   *
+   * @param credentials Credentials - the API key and secret
+   * @return the binance api client factory
+   */
+  public static BinanceApiClientFactory newInstance(ApiCredentials credentials) {
+    return new BinanceApiClientFactory(credentials.getKey(), credentials.getSecret());
   }
 
   /**
