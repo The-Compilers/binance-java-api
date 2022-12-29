@@ -2,32 +2,32 @@ package com.binance.api.client.constant;
 
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Utility class
+ * Utility class.
  */
 public final class Util {
 
   /**
    * List of fiat currencies.
    */
-  public static final List<String> FIAT_CURRENCY = Collections.unmodifiableList(Arrays.asList("USDT", "BUSD", "PAX", "TUSD", "USDC", "NGN", "RUB", "USDS", "TRY"));
+  private static final Set<String> FIAT_CURRENCIES = new HashSet<>(
+      Arrays.asList("EUR", "USDT", "BUSD", "PAX", "TUSD", "USDC", "NGN", "RUB", "USDS", "TRY")
+  );
 
   public static final String BTC_TICKER = "BTC";
 
   private Util() {
-
   }
 
   /**
    * Check if the ticker is fiat currency.
+   *
+   * @return True if it is a fiat currency (USD, EUR, etc), false when it isn't
    */
   public static boolean isFiatCurrency(String symbol) {
-    for (String fiat : FIAT_CURRENCY) {
-      if (symbol.equals(fiat)) return true;
-    }
-    return false;
+    return FIAT_CURRENCIES.contains(symbol);
   }
 }
