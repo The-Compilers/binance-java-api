@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
- * A withdraw result that was done to a Binance account.
+ * A withdrawal result that was done to a Binance account.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WithdrawResult {

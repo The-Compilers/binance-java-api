@@ -33,17 +33,17 @@ public class Account {
   private int sellerCommission;
 
   /**
-   * Whether or not this account can trade.
+   * Whether this account can trade.
    */
   private boolean canTrade;
 
   /**
-   * Whether or not it is possible to withdraw from this account.
+   * Whether it is possible to withdraw from this account.
    */
   private boolean canWithdraw;
 
   /**
-   * Whether or not it is possible to deposit into this account.
+   * Whether it is possible to deposit into this account.
    */
   private boolean canDeposit;
 
