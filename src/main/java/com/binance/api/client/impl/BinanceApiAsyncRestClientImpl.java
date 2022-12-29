@@ -5,14 +5,15 @@ import com.binance.api.client.BinanceApiCallback;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.Account;
+import com.binance.api.client.domain.account.Deposit;
 import com.binance.api.client.domain.account.DepositAddress;
-import com.binance.api.client.domain.account.DepositHistory;
+import com.binance.api.client.domain.account.ExtendedAssetBalance;
 import com.binance.api.client.domain.account.NewOrder;
 import com.binance.api.client.domain.account.NewOrderResponse;
 import com.binance.api.client.domain.account.Order;
 import com.binance.api.client.domain.account.Trade;
 import com.binance.api.client.domain.account.TradeHistoryItem;
-import com.binance.api.client.domain.account.WithdrawHistory;
+import com.binance.api.client.domain.account.Withdraw;
 import com.binance.api.client.domain.account.WithdrawResult;
 import com.binance.api.client.domain.account.request.AllOrdersRequest;
 import com.binance.api.client.domain.account.request.CancelOrderRequest;
@@ -30,6 +31,7 @@ import com.binance.api.client.domain.market.CandlestickInterval;
 import com.binance.api.client.domain.market.OrderBook;
 import com.binance.api.client.domain.market.TickerPrice;
 import com.binance.api.client.domain.market.TickerStatistics;
+import retrofit2.Call;
 
 import java.util.List;
 
@@ -122,7 +124,7 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
-  public void getPrice(String symbol , BinanceApiCallback<TickerPrice> callback) {
+  public void getPrice(String symbol, BinanceApiCallback<TickerPrice> callback) {
     binanceApiService.getLatestPrice(symbol).enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
@@ -194,6 +196,19 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
+  public void getUserAssets(String asset, boolean needBtcValuation,
+                            BinanceApiCallback<List<ExtendedAssetBalance>> callback) {
+    long timestamp = System.currentTimeMillis();
+    Call<List<ExtendedAssetBalance>> call = binanceApiService.getUserAssets(
+        asset,
+        needBtcValuation,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp
+    );
+    call.enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
   public void getMyTrades(String symbol, Integer limit, Long fromId, Long recvWindow, Long timestamp, BinanceApiCallback<List<Trade>> callback) {
     binanceApiService.getMyTrades(symbol, limit, fromId, recvWindow, timestamp).enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
@@ -209,28 +224,50 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
-  public void withdraw(String asset, String address, String amount, String name, String addressTag, BinanceApiCallback<WithdrawResult> callback) {
-    binanceApiService.withdraw(asset, address, amount, name, addressTag, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+  public void withdraw(String coin, String withdrawOrderId, String network, String address, String addressTag,
+                       String amount, Boolean transactionFeeFlag, String name, BinanceApiCallback<WithdrawResult> callback) {
+    binanceApiService.withdraw(coin, withdrawOrderId, network, address, addressTag, amount, transactionFeeFlag, name,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
         .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
   @Override
-  public void getDepositHistory(String asset, BinanceApiCallback<DepositHistory> callback) {
-    binanceApiService.getDepositHistory(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+  public void getDepositHistory(String coin, Integer status, Long startTime, Long endTime,
+                                Integer offset, Integer limit,
+                                BinanceApiCallback<List<Deposit>> callback) {
+    binanceApiService.getDepositHistory(coin, status, startTime, endTime, offset, limit,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
         .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
   @Override
-  public void getWithdrawHistory(String asset, BinanceApiCallback<WithdrawHistory> callback) {
-    binanceApiService.getWithdrawHistory(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
-        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  public void getDepositHistory(String coin, BinanceApiCallback<List<Deposit>> callback) {
+    getDepositHistory(coin, null, null, null, null, null, callback);
   }
 
   @Override
-  public void getDepositAddress(String asset, BinanceApiCallback<DepositAddress> callback) {
-    binanceApiService.getDepositAddress(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+  public void getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
+                                 Integer offset, Integer limit, Long startTime, Long endTime,
+                                 BinanceApiCallback<List<Withdraw>> callback) {
+    Call<List<Withdraw>> call = binanceApiService.getWithdrawHistory(coin, withdrawOrderId,
+        status, offset, limit, startTime, endTime, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        System.currentTimeMillis());
+    call.enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getWithdrawHistory(String coin, BinanceApiCallback<List<Withdraw>> callback) {
+    getWithdrawHistory(coin, null, null, null, null, null, null, callback);
+  }
+
+  @Override
+  public void getDepositAddress(String asset, String network,
+                                BinanceApiCallback<DepositAddress> callback) {
+    binanceApiService.getDepositAddress(asset, network,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
         .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
+
 
   // User stream endpoints
 

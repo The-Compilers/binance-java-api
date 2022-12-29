@@ -7,8 +7,8 @@ import com.binance.api.client.BinanceApiError;
  */
 public class BinanceApiException extends RuntimeException {
 
-    private static final long serialVersionUID = 3788669840036201041L;
-/**
+  private static final long serialVersionUID = 3788669840036201041L;
+  /**
    * Error response object returned by Binance API.
    */
   private BinanceApiError error;
@@ -51,7 +51,7 @@ public class BinanceApiException extends RuntimeException {
    * Instantiates a new binance api exception.
    *
    * @param message the message
-   * @param cause the cause
+   * @param cause   the cause
    */
   public BinanceApiException(String message, Throwable cause) {
     super(message, cause);

@@ -39,7 +39,7 @@ public interface BinanceApiRestClient {
   ExchangeInfo getExchangeInfo();
 
   /**
-   * @return All the supported assets and whether or not they can be withdrawn.
+   * @return All the supported assets and whether they can be withdrawn.
    */
   List<Asset> getAllAssets();
 
@@ -49,7 +49,7 @@ public interface BinanceApiRestClient {
    * Get order book of a symbol.
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
-   * @param limit depth of the order book (max 100)
+   * @param limit  depth of the order book (max 100)
    */
   OrderBook getOrderBook(String symbol, Integer limit);
 
@@ -57,7 +57,7 @@ public interface BinanceApiRestClient {
    * Get recent trades (up to last 500). Weight: 1
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
-   * @param limit of last trades (Default 500; max 1000.)
+   * @param limit  of last trades (Default 500; max 1000.)
    */
   List<TradeHistoryItem> getTrades(String symbol, Integer limit);
 
@@ -65,7 +65,7 @@ public interface BinanceApiRestClient {
    * Get older trades. Weight: 5
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
-   * @param limit of last trades (Default 500; max 1000.)
+   * @param limit  of last trades (Default 500; max 1000.)
    * @param fromId TradeId to fetch from. Default gets most recent trades.
    */
   List<TradeHistoryItem> getHistoricalTrades(String symbol, Integer limit, Long fromId);
@@ -73,15 +73,15 @@ public interface BinanceApiRestClient {
   /**
    * Get compressed, aggregate trades. Trades that fill at the time, from the same order, with
    * the same price will have the quantity aggregated.
-   *
+   * <p>
    * If both <code>startTime</code> and <code>endTime</code> are sent, <code>limit</code>should not
    * be sent AND the distance between <code>startTime</code> and <code>endTime</code> must be less than 24 hours.
    *
-   * @param symbol symbol to aggregate (mandatory)
-   * @param fromId ID to get aggregate trades from INCLUSIVE (optional)
-   * @param limit Default 500; max 1000 (optional)
+   * @param symbol    symbol to aggregate (mandatory)
+   * @param fromId    ID to get aggregate trades from INCLUSIVE (optional)
+   * @param limit     Default 500; max 1000 (optional)
    * @param startTime Timestamp in ms to get aggregate trades from INCLUSIVE (optional).
-   * @param endTime Timestamp in ms to get aggregate trades until INCLUSIVE (optional).
+   * @param endTime   Timestamp in ms to get aggregate trades until INCLUSIVE (optional).
    * @return a list of aggregate trades for the given symbol
    */
   List<AggTrade> getAggTrades(String symbol, String fromId, Integer limit, Long startTime, Long endTime);
@@ -96,11 +96,11 @@ public interface BinanceApiRestClient {
   /**
    * Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
    *
-   * @param symbol symbol to aggregate (mandatory)
-   * @param interval candlestick interval (mandatory)
-   * @param limit Default 500; max 1000 (optional)
+   * @param symbol    symbol to aggregate (mandatory)
+   * @param interval  candlestick interval (mandatory)
+   * @param limit     Default 500; max 1000 (optional)
    * @param startTime Timestamp in ms to get candlestick bars from INCLUSIVE (optional).
-   * @param endTime Timestamp in ms to get candlestick bars until INCLUSIVE (optional).
+   * @param endTime   Timestamp in ms to get candlestick bars until INCLUSIVE (optional).
    * @return a candlestick bar for the given symbol and interval
    */
   List<Candlestick> getCandlestickBars(String symbol, CandlestickInterval interval, Integer limit, Long startTime, Long endTime);
@@ -125,12 +125,12 @@ public interface BinanceApiRestClient {
   List<TickerStatistics> getAll24HrPriceStatistics();
 
   /**
-   * Get Latest price for all symbols.
+   * Get the latest price for all symbols.
    */
   List<TickerPrice> getAllPrices();
 
   /**
-   * Get latest price for <code>symbol</code>.
+   * Get the latest price for <code>symbol</code>.
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
    */
@@ -160,8 +160,8 @@ public interface BinanceApiRestClient {
 
   /**
    * Check an order's status.
-   * @param orderStatusRequest order status request options/filters
    *
+   * @param orderStatusRequest order status request options/filters
    * @return an order
    */
   Order getOrderStatus(OrderStatusRequest orderStatusRequest);
@@ -190,15 +190,6 @@ public interface BinanceApiRestClient {
   List<Order> getAllOrders(AllOrdersRequest orderRequest);
 
   /**
-   * Send in a new OCO;
-   *
-   * @param oco
-   *            the OCO to submit
-   * @return a response containing details about the newly placed OCO.
-   */
-  NewOCOResponse newOCO(NewOCO oco);
-
-  /**
    * Cancel an entire Order List
    *
    * @return
@@ -224,28 +215,23 @@ public interface BinanceApiRestClient {
   /**
    * Get current account information.
    */
-  Account getAccount(Long recvWindow, Long timestamp);
-
-  /**
-   * Get current account information using default parameters.
-   */
   Account getAccount();
 
   /**
    * Get trades for a specific account and symbol.
    *
    * @param symbol symbol to get trades from
-   * @param limit default 500; max 1000
+   * @param limit  default 500; max 1000
    * @param fromId TradeId to fetch from. Default gets most recent trades.
    * @return a list of trades
    */
-  List<Trade> getMyTrades(String symbol, Integer limit, Long fromId, Long recvWindow, Long timestamp);
+  List<Trade> getMyTrades(String symbol, Integer limit, Long fromId);
 
   /**
    * Get trades for a specific account and symbol.
    *
    * @param symbol symbol to get trades from
-   * @param limit default 500; max 1000
+   * @param limit  default 500; max 1000
    * @return a list of trades
    */
   List<Trade> getMyTrades(String symbol, Integer limit);
@@ -257,55 +243,112 @@ public interface BinanceApiRestClient {
    * @return a list of trades
    */
   List<Trade> getMyTrades(String symbol);
-  
+
   List<Trade> getMyTrades(String symbol, Long fromId);
 
   /**
-   * Submit a withdraw request.
+   * Submit a withdrawal request.
+   * Withdrawals option has to be active in the API settings.
    *
-   * Enable Withdrawals option has to be active in the API settings.
-   *
-   * @param asset asset symbol to withdraw
-   * @param address address to withdraw to
-   * @param amount amount to withdraw
-   * @param name description/alias of the address
-   * @param addressTag Secondary address identifier for coins like XRP,XMR etc.
+   * @param coin               asset symbol to withdraw
+   * @param withdrawOrderId    client id for withdraw
+   * @param network            the network to use for the withdrawal
+   * @param address            address to withdraw to
+   * @param addressTag         Secondary address identifier for coins like XRP,XMR etc.
+   * @param amount             amount to withdraw
+   * @param transactionFeeFlag When making internal transfer, true for returning the fee to the destination account; false for returning the fee back to the departure account. Default false.
+   * @param name               Description of the address. Space in name should be encoded into %20.
    */
-  WithdrawResult withdraw(String asset, String address, String amount, String name, String addressTag);
+  WithdrawResult withdraw(String coin, String withdrawOrderId, String network, String address, String amount,
+                          String name, String addressTag, Boolean transactionFeeFlag);
 
   /**
    * Conver a list of assets to BNB
+   *
    * @param asset the list of assets to convert
    */
-  DustTransferResponse dustTranfer(List<String> asset);
+  DustTransferResponse dustTransfer(List<String> asset);
 
   /**
    * Fetch account deposit history.
    *
    * @return deposit history, containing a list of deposits
    */
-  DepositHistory getDepositHistory(String asset);
+  List<Deposit> getDepositHistory(String asset);
+
+  /**
+   * Fetch account deposit history.
+   *
+   * @param coin      the asset to get the history for
+   * @param status    When specified, filter by transaction status:
+   *                  - 0: pending
+   *                  - 6: credited but cannot withdraw
+   *                  - 1: success)
+   * @param startTime Default: 90 days from current timestamp
+   * @param endTime   Default: present timestamp
+   * @param offset    Default:0
+   * @param limit     Default:1000, Max:1000
+   * @return deposit history, containing a list of deposits
+   */
+  List<Deposit> getDepositHistory(String coin, Integer status, Long startTime, Long endTime,
+                                  Integer offset, Integer limit);
 
   /**
    * Fetch account withdraw history.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
+   * Comments from the docs:
+   * Please notice the default startTime and endTime to make sure that time interval is within 0-90 days.
+   * If both startTime and endTime are sent, time between startTime and endTime must be less than 90 days.
+   * If withdrawOrderId is sent, time between startTime and endTime must be less than 7 days.
+   * If withdrawOrderId is sent, startTime and endTime are not sent, will return last 7 days records by default.
    *
+   * @param coin
+   * @param withdrawOrderId
+   * @param status          When specified, filter by transaction status:
+   *                        - 0:Email Sent
+   *                        - 1:Cancelled
+   *                        - 2:Awaiting Approval
+   *                        - 3:Rejected
+   *                        - 4:Processing
+   *                        - 5:Failure
+   *                        - 6:Completed
+   * @param offset
+   * @param limit           Default: 1000, Max: 1000
+   * @param startTime       Default: 90 days from current timestamp
+   * @param endTime         Default: present timestamp
    * @return withdraw history, containing a list of withdrawals
    */
-  WithdrawHistory getWithdrawHistory(String asset);
+  List<Withdraw> getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
+                                    Integer offset, Integer limit, Long startTime, Long endTime);
 
   /**
-   * Fetch sub-account transfer history.
+   * Fetch account withdraw history, with default values.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
    *
-   * @return sub-account transfers
+   * @param coin The coin to look withdrawals for
+   * @return withdraw history, containing a list of withdrawals
    */
-  List<SubAccountTransfer> getSubAccountTransfers();
+  List<Withdraw> getWithdrawHistory(String coin);
 
   /**
    * Fetch deposit address.
    *
+   * @param coin   The coin to get the address for
+   * @param network The network to use for deposit
    * @return deposit address for a given asset.
    */
-  DepositAddress getDepositAddress(String asset);
+  DepositAddress getDepositAddress(String coin, String network);
+
+  /**
+   * Get User account information.
+   *
+   * @param asset            When specified, include only the given asset. When null, get
+   *                         balances for all assets
+   * @param needBtcValuation When true, include value in BTC for each asset.
+   * @return A list of all user assets with non-zero balances (or only the one asset,
+   * when specified)
+   */
+  List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation);
 
   // User stream endpoints
 

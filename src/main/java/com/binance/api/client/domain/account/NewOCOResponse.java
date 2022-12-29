@@ -10,79 +10,79 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class NewOCOResponse extends OrderList {
 
-    private Long orderListId;
-    private ContingencyType contingencyType;
-    private OCOStatus listStatusType;
-    private OCOOrderStatus listOrderStatus;
-    private String listClientOrderId;
-    private Long transactionTime;
-    private String symbol;
-    private List<OrderReport> orderReports;
+  private Long orderListId;
+  private ContingencyType contingencyType;
+  private OCOStatus listStatusType;
+  private OCOOrderStatus listOrderStatus;
+  private String listClientOrderId;
+  private Long transactionTime;
+  private String symbol;
+  private List<OrderReport> orderReports;
 
-    // Getters
-    public Long getOrderListId() {
-        return this.orderListId;
-    }
+  // Getters
+  public Long getOrderListId() {
+    return this.orderListId;
+  }
 
-    public ContingencyType getContingencyType() {
-        return this.contingencyType;
-    }
+  public ContingencyType getContingencyType() {
+    return this.contingencyType;
+  }
 
-    public OCOStatus getListStatusType() {
-        return this.listStatusType;
-    }
+  public OCOStatus getListStatusType() {
+    return this.listStatusType;
+  }
 
-    public OCOOrderStatus getListOrderStatus() {
-        return this.listOrderStatus;
-    }
+  public OCOOrderStatus getListOrderStatus() {
+    return this.listOrderStatus;
+  }
 
-    public String getListClientOrderId() {
-        return this.listClientOrderId;
-    }
+  public String getListClientOrderId() {
+    return this.listClientOrderId;
+  }
 
-    public Long getTransactionTime() {
-        return this.transactionTime;
-    }
+  public Long getTransactionTime() {
+    return this.transactionTime;
+  }
 
-    public String getSymbol() {
-        return this.symbol;
-    }
+  public String getSymbol() {
+    return this.symbol;
+  }
 
-    public List<OrderReport> getOrderReports() {
-        return orderReports;
-    }
+  public List<OrderReport> getOrderReports() {
+    return orderReports;
+  }
 
-    // Setter
-    public void setOrderListId(Long orderListId) {
-        this.orderListId = orderListId;
-    }
+  // Setter
+  public void setOrderListId(Long orderListId) {
+    this.orderListId = orderListId;
+  }
 
-    public void setContingencyType(ContingencyType contingencyType) {
-        this.contingencyType = contingencyType;
-    }
+  public void setContingencyType(ContingencyType contingencyType) {
+    this.contingencyType = contingencyType;
+  }
 
-    public void setListStatusType(OCOStatus listStatusType) {
-        this.listStatusType = listStatusType;
-    }
+  public void setListStatusType(OCOStatus listStatusType) {
+    this.listStatusType = listStatusType;
+  }
 
-    public void setListOrderStatus(OCOOrderStatus listOrderStatus) {
-        this.listOrderStatus = listOrderStatus;
-    }
+  public void setListOrderStatus(OCOOrderStatus listOrderStatus) {
+    this.listOrderStatus = listOrderStatus;
+  }
 
-    public void setListClientOrderId(String listClientOrderId) {
-        this.listClientOrderId = listClientOrderId;
-    }
+  public void setListClientOrderId(String listClientOrderId) {
+    this.listClientOrderId = listClientOrderId;
+  }
 
-    public void setTransactionTime(Long transactionTime) {
-        this.transactionTime = transactionTime;
-    }
+  public void setTransactionTime(Long transactionTime) {
+    this.transactionTime = transactionTime;
+  }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
 
-    public void setOrderReports(List<OrderReport> orderReports) {
-        this.orderReports = orderReports;
-    }
+  public void setOrderReports(List<OrderReport> orderReports) {
+    this.orderReports = orderReports;
+  }
 
 }

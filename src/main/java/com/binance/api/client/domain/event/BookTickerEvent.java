@@ -12,101 +12,101 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BookTickerEvent {
 
-    @JsonProperty("u")
-    private long updateId;
+  @JsonProperty("u")
+  private long updateId;
 
-    @JsonProperty("s")
-    private String symbol;
+  @JsonProperty("s")
+  private String symbol;
 
-    @JsonProperty("b")
-    private String bidPrice;
+  @JsonProperty("b")
+  private String bidPrice;
 
-    @JsonProperty("B")
-    private String bidQuantity;
+  @JsonProperty("B")
+  private String bidQuantity;
 
-    @JsonProperty("a")
-    private String askPrice;
+  @JsonProperty("a")
+  private String askPrice;
 
-    @JsonProperty("A")
-    private String askQuantity;
+  @JsonProperty("A")
+  private String askQuantity;
 
-    public BookTickerEvent() {
-        super();
-    }
+  public BookTickerEvent() {
+    super();
+  }
 
-    public BookTickerEvent(long updateId, String symbol, String bidPrice, String bidQuantity, String askPrice,
-                           String askQuantity) {
-        super();
-        this.updateId = updateId;
-        this.symbol = symbol;
-        this.bidPrice = bidPrice;
-        this.bidQuantity = bidQuantity;
-        this.askPrice = askPrice;
-        this.askQuantity = askQuantity;
-    }
+  public BookTickerEvent(long updateId, String symbol, String bidPrice, String bidQuantity, String askPrice,
+                         String askQuantity) {
+    super();
+    this.updateId = updateId;
+    this.symbol = symbol;
+    this.bidPrice = bidPrice;
+    this.bidQuantity = bidQuantity;
+    this.askPrice = askPrice;
+    this.askQuantity = askQuantity;
+  }
 
-    public BookTickerEvent(String symbol, String bidPrice, String bidQuantity, String askPrice, String askQuantity) {
-        super();
-        this.symbol = symbol;
-        this.bidPrice = bidPrice;
-        this.bidQuantity = bidQuantity;
-        this.askPrice = askPrice;
-        this.askQuantity = askQuantity;
-    }
+  public BookTickerEvent(String symbol, String bidPrice, String bidQuantity, String askPrice, String askQuantity) {
+    super();
+    this.symbol = symbol;
+    this.bidPrice = bidPrice;
+    this.bidQuantity = bidQuantity;
+    this.askPrice = askPrice;
+    this.askQuantity = askQuantity;
+  }
 
-    public long getUpdateId() {
-        return updateId;
-    }
+  public long getUpdateId() {
+    return updateId;
+  }
 
-    public void setUpdateId(long updateId) {
-        this.updateId = updateId;
-    }
+  public void setUpdateId(long updateId) {
+    this.updateId = updateId;
+  }
 
-    public String getSymbol() {
-        return symbol;
-    }
+  public String getSymbol() {
+    return symbol;
+  }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
 
-    public String getBidPrice() {
-        return bidPrice;
-    }
+  public String getBidPrice() {
+    return bidPrice;
+  }
 
-    public void setBidPrice(String bidPrice) {
-        this.bidPrice = bidPrice;
-    }
+  public void setBidPrice(String bidPrice) {
+    this.bidPrice = bidPrice;
+  }
 
-    public String getBidQuantity() {
-        return bidQuantity;
-    }
+  public String getBidQuantity() {
+    return bidQuantity;
+  }
 
-    public void setBidQuantity(String bidQuantity) {
-        this.bidQuantity = bidQuantity;
-    }
+  public void setBidQuantity(String bidQuantity) {
+    this.bidQuantity = bidQuantity;
+  }
 
-    public String getAskPrice() {
-        return askPrice;
-    }
+  public String getAskPrice() {
+    return askPrice;
+  }
 
-    public void setAskPrice(String askPrice) {
-        this.askPrice = askPrice;
-    }
+  public void setAskPrice(String askPrice) {
+    this.askPrice = askPrice;
+  }
 
-    public String getAskQuantity() {
-        return askQuantity;
-    }
+  public String getAskQuantity() {
+    return askQuantity;
+  }
 
-    public void setAskQuantity(String askQuantity) {
-        this.askQuantity = askQuantity;
-    }
+  public void setAskQuantity(String askQuantity) {
+    this.askQuantity = askQuantity;
+  }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE).append("eventType", "BookTicker")
-                .append("updateId", updateId).append("symbol", symbol).append("bidPrice", bidPrice)
-                .append("bidQuantity", bidQuantity).append("askPrice", askPrice).append("askQuantity", askQuantity)
-                .toString();
-    }
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE).append("eventType", "BookTicker")
+        .append("updateId", updateId).append("symbol", symbol).append("bidPrice", bidPrice)
+        .append("bidQuantity", bidQuantity).append("askPrice", askPrice).append("askQuantity", askQuantity)
+        .toString();
+  }
 }

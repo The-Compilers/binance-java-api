@@ -39,6 +39,30 @@ public class AssetBalance {
     return free;
   }
 
+  /**
+   * Get free amount as a floating point number.
+   *
+   * @return The free amount
+   * @throws NumberFormatException if the free amount is not a valid number
+   */
+  public Double getFreeAsNumber() {
+    return Double.parseDouble(free);
+  }
+
+  /**
+   * Get locked amount as a floating point number.
+   *
+   * @return The locked amount
+   * @throws NumberFormatException if the locked amount is not a valid number
+   */
+  public Double getLockedAsNumber() {
+    return Double.parseDouble(locked);
+  }
+
+  public Double getTotalAmount() {
+    return getFreeAsNumber() + getLockedAsNumber();
+  }
+
   public void setFree(String free) {
     this.free = free;
   }

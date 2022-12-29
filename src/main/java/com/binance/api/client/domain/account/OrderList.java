@@ -13,101 +13,101 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OrderList {
 
-    /**
-     * Order id.
-     */
-    private Long orderListId;
+  /**
+   * Order id.
+   */
+  private Long orderListId;
 
-    private ContingencyType contingencyType;
+  private ContingencyType contingencyType;
 
-    private OCOStatus listStatusType;
+  private OCOStatus listStatusType;
 
-    private OCOOrderStatus listOrderStatus;
+  private OCOOrderStatus listOrderStatus;
 
-    private String listClientOrderId;
+  private String listClientOrderId;
 
-    private Long transactionTime;
+  private Long transactionTime;
 
-    private String symbol;
+  private String symbol;
 
-    private List<Order> orders;
+  private List<Order> orders;
 
-    public Long getOrderListId() {
-        return orderListId;
-    }
+  public Long getOrderListId() {
+    return orderListId;
+  }
 
-    public void setOrderListId(Long orderListId) {
-        this.orderListId = orderListId;
-    }
+  public void setOrderListId(Long orderListId) {
+    this.orderListId = orderListId;
+  }
 
-    public ContingencyType getContingencyType() {
-        return contingencyType;
-    }
+  public ContingencyType getContingencyType() {
+    return contingencyType;
+  }
 
-    public void setContingencyType(ContingencyType contingencyType) {
-        this.contingencyType = contingencyType;
-    }
+  public void setContingencyType(ContingencyType contingencyType) {
+    this.contingencyType = contingencyType;
+  }
 
-    public OCOStatus getListStatusType() {
-        return listStatusType;
-    }
+  public OCOStatus getListStatusType() {
+    return listStatusType;
+  }
 
-    public void setListStatusType(OCOStatus listStatusType) {
-        this.listStatusType = listStatusType;
-    }
+  public void setListStatusType(OCOStatus listStatusType) {
+    this.listStatusType = listStatusType;
+  }
 
-    public OCOOrderStatus getListOrderStatus() {
-        return listOrderStatus;
-    }
+  public OCOOrderStatus getListOrderStatus() {
+    return listOrderStatus;
+  }
 
-    public void setListOrderStatus(OCOOrderStatus listOrderStatus) {
-        this.listOrderStatus = listOrderStatus;
-    }
+  public void setListOrderStatus(OCOOrderStatus listOrderStatus) {
+    this.listOrderStatus = listOrderStatus;
+  }
 
-    public String getListClientOrderId() {
-        return listClientOrderId;
-    }
+  public String getListClientOrderId() {
+    return listClientOrderId;
+  }
 
-    public void setListClientOrderId(String listClientOrderId) {
-        this.listClientOrderId = listClientOrderId;
-    }
+  public void setListClientOrderId(String listClientOrderId) {
+    this.listClientOrderId = listClientOrderId;
+  }
 
-    public Long getTransactionTime() {
-        return transactionTime;
-    }
+  public Long getTransactionTime() {
+    return transactionTime;
+  }
 
-    public void setTransactionTime(Long transactionTime) {
-        this.transactionTime = transactionTime;
-    }
+  public void setTransactionTime(Long transactionTime) {
+    this.transactionTime = transactionTime;
+  }
 
-    public String getSymbol() {
-        return symbol;
-    }
+  public String getSymbol() {
+    return symbol;
+  }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
 
-    public List<Order> getOrders() {
-        return orders;
-    }
+  public List<Order> getOrders() {
+    return orders;
+  }
 
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
+  public void setOrders(List<Order> orders) {
+    this.orders = orders;
+  }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
-                .append("orderListId", orderListId)
-                .append("contingencyType", contingencyType)
-                .append("listStatusType", listStatusType)
-                .append("listOrderStatus", listOrderStatus)
-                .append("listClientOrderId", listClientOrderId)
-                .append("transactionTime", transactionTime)
-                .append("symbol", symbol)
-                .append("orders", orders)
-                .toString();
-    }
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
+        .append("orderListId", orderListId)
+        .append("contingencyType", contingencyType)
+        .append("listStatusType", listStatusType)
+        .append("listOrderStatus", listOrderStatus)
+        .append("listClientOrderId", listClientOrderId)
+        .append("transactionTime", transactionTime)
+        .append("symbol", symbol)
+        .append("orders", orders)
+        .toString();
+  }
 
 }

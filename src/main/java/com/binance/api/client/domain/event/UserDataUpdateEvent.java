@@ -94,11 +94,17 @@ public class UserDataUpdateEvent {
   }
 
   public enum UserDataUpdateEventType {
-    /** Corresponds to "outboundAccountPosition" events. */
+    /**
+     * Corresponds to "outboundAccountPosition" events.
+     */
     ACCOUNT_POSITION_UPDATE("outboundAccountPosition"),
-    /** Corresponds to "balanceUpdate" events. */
+    /**
+     * Corresponds to "balanceUpdate" events.
+     */
     BALANCE_UPDATE("balanceUpdate"),
-    /** Corresponds to "executionReport" events. */
+    /**
+     * Corresponds to "executionReport" events.
+     */
     ORDER_TRADE_UPDATE("executionReport"),
     ;
 

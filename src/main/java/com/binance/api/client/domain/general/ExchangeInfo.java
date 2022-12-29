@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Current exchange trading rules and symbol information.
- * https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md
+ * https://github.com/binance/binance-spot-api-docs/blob/master/rest-api.md
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExchangeInfo {
