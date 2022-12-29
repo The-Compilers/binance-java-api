@@ -1,24 +1,13 @@
 package com.binance.api.examples;
 
-import com.binance.api.client.BinanceApiClientFactory;
-import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.constant.Util;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.AssetBalance;
-import com.binance.api.client.security.ApiCredentials;
 
 /**
  * Example how to get total of balances on your account
  */
-public class TotalAccountBalanceExample {
-  private final BinanceApiRestClient client;
-
-  TotalAccountBalanceExample() {
-    ApiCredentials credentials = ApiCredentials.creatFromEnvironment();
-    BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance(credentials);
-    client = factory.newRestClient();
-  }
-
+public class TotalAccountBalanceExample extends AuthenticatedExampleBase {
 
   public static void main(String[] args) {
     TotalAccountBalanceExample example = new TotalAccountBalanceExample();
