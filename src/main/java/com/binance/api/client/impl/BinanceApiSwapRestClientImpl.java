@@ -15,101 +15,101 @@ import static com.binance.api.client.impl.BinanceApiServiceGenerator.executeSync
  */
 public class BinanceApiSwapRestClientImpl implements BinanceApiSwapRestClient {
 
-    private final BinanceApiService binanceApiService;
+  private final BinanceApiService binanceApiService;
 
-    public BinanceApiSwapRestClientImpl(String apiKey, String secret) {
-        binanceApiService = createService(BinanceApiService.class, apiKey, secret);
+  public BinanceApiSwapRestClientImpl(String apiKey, String secret) {
+    binanceApiService = createService(BinanceApiService.class, apiKey, secret);
+  }
+
+  @Override
+  public List<Pool> listAllSwapPools() {
+    return executeSync(binanceApiService.listAllSwapPools());
+  }
+
+  @Override
+  public Liquidity getPoolLiquidityInfo(String poolId) {
+    long timestamp = System.currentTimeMillis();
+    List<Liquidity> liquidities = executeSync(binanceApiService.getPoolLiquidityInfo(poolId,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+    if (liquidities != null && !liquidities.isEmpty()) {
+      return liquidities.get(0);
     }
+    return null;
+  }
 
-    @Override
-    public List<Pool> listAllSwapPools() {
-        return executeSync(binanceApiService.listAllSwapPools());
+  @Override
+  public LiquidityOperationRecord addLiquidity(String poolId, String asset, String quantity) {
+    long timestamp = System.currentTimeMillis();
+    return executeSync(binanceApiService.addLiquidity(poolId,
+        asset,
+        quantity,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+  }
+
+  @Override
+  public LiquidityOperationRecord removeLiquidity(String poolId, SwapRemoveType type, List<String> asset, String shareAmount) {
+    long timestamp = System.currentTimeMillis();
+    return executeSync(binanceApiService.removeLiquidity(poolId,
+        type,
+        asset,
+        shareAmount,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+  }
+
+  @Override
+  public List<LiquidityOperationRecord> getPoolLiquidityOperationRecords(String poolId, Integer limit) {
+    long timestamp = System.currentTimeMillis();
+    return executeSync(binanceApiService.getPoolLiquidityOperationRecords(
+        poolId,
+        limit,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+
+  }
+
+  @Override
+  public LiquidityOperationRecord getLiquidityOperationRecord(String operationId) {
+    long timestamp = System.currentTimeMillis();
+    List<LiquidityOperationRecord> records = executeSync(binanceApiService.getLiquidityOperationRecord(
+        operationId,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+    if (records != null && !records.isEmpty()) {
+      return records.get(0);
     }
+    return null;
+  }
 
-    @Override
-    public Liquidity getPoolLiquidityInfo(String poolId) {
-        long timestamp = System.currentTimeMillis();
-        List<Liquidity> liquidities = executeSync(binanceApiService.getPoolLiquidityInfo(poolId,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-        if (liquidities != null && !liquidities.isEmpty()) {
-            return liquidities.get(0);
-        }
-        return null;
+  @Override
+  public SwapQuote requestQuote(String quoteAsset,
+                                String baseAsset,
+                                String quoteQty) {
+    long timestamp = System.currentTimeMillis();
+    return executeSync(binanceApiService.requestQuote(quoteAsset, baseAsset, quoteQty,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+  }
+
+  @Override
+  public SwapRecord swap(String quoteAsset, String baseAsset, String quoteQty) {
+    long timestamp = System.currentTimeMillis();
+    return executeSync(binanceApiService.swap(quoteAsset, baseAsset, quoteQty,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+  }
+
+  @Override
+  public SwapHistory getSwapHistory(String swapId) {
+    long timestamp = System.currentTimeMillis();
+    List<SwapHistory> history = executeSync(binanceApiService.getSwapHistory(swapId,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        timestamp));
+    if (history != null && !history.isEmpty()) {
+      return history.get(0);
     }
-
-    @Override
-    public LiquidityOperationRecord addLiquidity(String poolId, String asset, String quantity) {
-        long timestamp = System.currentTimeMillis();
-        return executeSync(binanceApiService.addLiquidity(poolId,
-                asset,
-                quantity,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-    }
-
-    @Override
-    public LiquidityOperationRecord removeLiquidity(String poolId, SwapRemoveType type, List<String> asset, String shareAmount) {
-        long timestamp = System.currentTimeMillis();
-        return executeSync(binanceApiService.removeLiquidity(poolId,
-                type,
-                asset,
-                shareAmount,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-    }
-
-    @Override
-    public List<LiquidityOperationRecord> getPoolLiquidityOperationRecords(String poolId, Integer limit) {
-        long timestamp = System.currentTimeMillis();
-        return executeSync(binanceApiService.getPoolLiquidityOperationRecords(
-                poolId,
-                limit,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-
-    }
-
-    @Override
-    public LiquidityOperationRecord getLiquidityOperationRecord(String operationId) {
-        long timestamp = System.currentTimeMillis();
-        List<LiquidityOperationRecord> records = executeSync(binanceApiService.getLiquidityOperationRecord(
-                operationId,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-        if (records != null && !records.isEmpty()) {
-            return records.get(0);
-        }
-        return null;
-    }
-
-    @Override
-    public SwapQuote requestQuote(String quoteAsset,
-                                  String baseAsset,
-                                  String quoteQty) {
-        long timestamp = System.currentTimeMillis();
-        return executeSync(binanceApiService.requestQuote(quoteAsset, baseAsset, quoteQty,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-    }
-
-    @Override
-    public SwapRecord swap(String quoteAsset, String baseAsset, String quoteQty) {
-        long timestamp = System.currentTimeMillis();
-        return executeSync(binanceApiService.swap(quoteAsset, baseAsset, quoteQty,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-    }
-
-    @Override
-    public SwapHistory getSwapHistory(String swapId) {
-        long timestamp = System.currentTimeMillis();
-        List<SwapHistory> history = executeSync(binanceApiService.getSwapHistory(swapId,
-                BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-                timestamp));
-        if (history != null && !history.isEmpty()) {
-            return history.get(0);
-        }
-        return null;
-    }
+    return null;
+  }
 }

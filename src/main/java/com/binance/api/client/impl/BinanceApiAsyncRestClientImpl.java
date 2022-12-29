@@ -122,7 +122,7 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
-  public void getPrice(String symbol , BinanceApiCallback<TickerPrice> callback) {
+  public void getPrice(String symbol, BinanceApiCallback<TickerPrice> callback) {
     binanceApiService.getLatestPrice(symbol).enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 

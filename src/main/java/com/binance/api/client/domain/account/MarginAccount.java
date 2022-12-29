@@ -100,9 +100,9 @@ public class MarginAccount {
    */
   public MarginAssetBalance getAssetBalance(final String symbol) {
     return userAssets.stream()
-            .filter(marginAssetBalance -> marginAssetBalance.getAsset().equals(symbol))
-            .findFirst()
-            .orElse(MarginAssetBalance.of(symbol));
+        .filter(marginAssetBalance -> marginAssetBalance.getAsset().equals(symbol))
+        .findFirst()
+        .orElse(MarginAssetBalance.of(symbol));
   }
 
   @Override

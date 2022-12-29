@@ -80,10 +80,10 @@ public class CancelOrderResponse {
   @Override
   public String toString() {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
-            .append("symbol", symbol)
-            .append("origClientOrderId", origClientOrderId)
-            .append("orderId", orderId)
-            .append("clientOrderId", clientOrderId)
-            .toString();
+        .append("symbol", symbol)
+        .append("origClientOrderId", origClientOrderId)
+        .append("orderId", orderId)
+        .append("clientOrderId", clientOrderId)
+        .toString();
   }
 }

@@ -16,12 +16,12 @@ public class CandlestickEventSerializer extends JsonSerializer<CandlestickEvent>
   @Override
   public void serialize(CandlestickEvent candlestickEvent, JsonGenerator gen, SerializerProvider serializers) throws IOException {
     gen.writeStartObject();
-    
+
     // Write header
     gen.writeStringField("e", candlestickEvent.getEventType());
     gen.writeNumberField("E", candlestickEvent.getEventTime());
     gen.writeStringField("s", candlestickEvent.getSymbol());
-    
+
     // Write candlestick data
     gen.writeObjectFieldStart("k");
     gen.writeNumberField("t", candlestickEvent.getOpenTime());

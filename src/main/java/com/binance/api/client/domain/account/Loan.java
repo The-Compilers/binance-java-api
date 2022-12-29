@@ -9,40 +9,40 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Loan {
 
-    private String asset;
-    private String principal;
-    private long timestamp;
-    private LoanStatus status;
+  private String asset;
+  private String principal;
+  private long timestamp;
+  private LoanStatus status;
 
-    public String getAsset() {
-        return asset;
-    }
+  public String getAsset() {
+    return asset;
+  }
 
-    public void setAsset(String asset) {
-        this.asset = asset;
-    }
+  public void setAsset(String asset) {
+    this.asset = asset;
+  }
 
-    public String getPrincipal() {
-        return principal;
-    }
+  public String getPrincipal() {
+    return principal;
+  }
 
-    public void setPrincipal(String principal) {
-        this.principal = principal;
-    }
+  public void setPrincipal(String principal) {
+    this.principal = principal;
+  }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+  public long getTimestamp() {
+    return timestamp;
+  }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
+  public void setTimestamp(long timestamp) {
+    this.timestamp = timestamp;
+  }
 
-    public LoanStatus getStatus() {
-        return status;
-    }
+  public LoanStatus getStatus() {
+    return status;
+  }
 
-    public void setStatus(LoanStatus status) {
-        this.status = status;
-    }
+  public void setStatus(LoanStatus status) {
+    this.status = status;
+  }
 }

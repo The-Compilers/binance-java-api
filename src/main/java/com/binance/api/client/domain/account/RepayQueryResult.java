@@ -34,8 +34,8 @@ public class RepayQueryResult {
   @Override
   public String toString() {
     return "RepayQueryResult{" +
-            "total=" + total +
-            ", rows=" + rows +
-            '}';
+        "total=" + total +
+        ", rows=" + rows +
+        '}';
   }
 }

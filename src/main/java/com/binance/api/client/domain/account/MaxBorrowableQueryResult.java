@@ -25,7 +25,7 @@ public class MaxBorrowableQueryResult {
   @Override
   public String toString() {
     return "MaxBorrowQueryResult{" +
-            "amount='" + amount + '\'' +
-            '}';
+        "amount='" + amount + '\'' +
+        '}';
   }
 }

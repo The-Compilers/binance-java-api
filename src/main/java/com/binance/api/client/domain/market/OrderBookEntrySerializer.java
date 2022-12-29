@@ -12,7 +12,7 @@ import java.io.IOException;
 public class OrderBookEntrySerializer extends JsonSerializer<OrderBookEntry> {
 
   @Override
-  public void serialize(OrderBookEntry orderBookEntry, JsonGenerator gen, SerializerProvider serializers) throws IOException {    
+  public void serialize(OrderBookEntry orderBookEntry, JsonGenerator gen, SerializerProvider serializers) throws IOException {
     gen.writeStartArray();
     gen.writeString(orderBookEntry.getPrice());
     gen.writeString(orderBookEntry.getQty());

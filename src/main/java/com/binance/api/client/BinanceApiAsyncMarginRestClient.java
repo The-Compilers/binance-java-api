@@ -31,7 +31,7 @@ public interface BinanceApiAsyncMarginRestClient {
    * Get all open orders on margin account for a symbol (async).
    *
    * @param orderRequest order request parameters
-   * @param callback the callback that handles the response
+   * @param callback     the callback that handles the response
    */
   void getOpenOrders(OrderRequest orderRequest, BinanceApiCallback<List<Order>> callback);
 
@@ -84,7 +84,8 @@ public interface BinanceApiAsyncMarginRestClient {
 
   /**
    * Execute transfer between spot account and margin account
-   * @param asset asset to repay
+   *
+   * @param asset  asset to repay
    * @param amount amount to repay
    * @return transaction id
    */
@@ -92,7 +93,8 @@ public interface BinanceApiAsyncMarginRestClient {
 
   /**
    * Apply for a loan
-   * @param asset asset to repay
+   *
+   * @param asset  asset to repay
    * @param amount amount to repay
    * @return transaction id
    */
@@ -100,7 +102,8 @@ public interface BinanceApiAsyncMarginRestClient {
 
   /**
    * Repay loan for margin account
-   * @param asset asset to repay
+   *
+   * @param asset  asset to repay
    * @param amount amount to repay
    * @return transaction id
    */

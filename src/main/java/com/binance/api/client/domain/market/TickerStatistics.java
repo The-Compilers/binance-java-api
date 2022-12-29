@@ -222,13 +222,13 @@ public class TickerStatistics {
   public void setCount(long count) {
     this.count = count;
   }
-  
+
   public String getSymbol() {
-	return symbol;
+    return symbol;
   }
 
   public void setSymbol(String symbol) {
-	this.symbol = symbol;
+    this.symbol = symbol;
   }
 
   @Override
