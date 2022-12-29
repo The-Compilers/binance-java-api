@@ -215,11 +215,6 @@ public interface BinanceApiRestClient {
   /**
    * Get current account information.
    */
-  Account getAccount(Long recvWindow, Long timestamp);
-
-  /**
-   * Get current account information using default parameters.
-   */
   Account getAccount();
 
   /**
@@ -230,7 +225,7 @@ public interface BinanceApiRestClient {
    * @param fromId TradeId to fetch from. Default gets most recent trades.
    * @return a list of trades
    */
-  List<Trade> getMyTrades(String symbol, Integer limit, Long fromId, Long recvWindow, Long timestamp);
+  List<Trade> getMyTrades(String symbol, Integer limit, Long fromId);
 
   /**
    * Get trades for a specific account and symbol.
