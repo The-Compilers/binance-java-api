@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * A withdraw that was done to a Binance account.
+ * A withdrawal from a Binance account.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Withdraw {
@@ -23,11 +23,9 @@ public class Withdraw {
   /**
    * Symbol.
    */
-  private String asset;
+  private String coin;
 
   private String applyTime;
-
-  private String successTime;
 
   /**
    * Transaction id.
@@ -60,12 +58,12 @@ public class Withdraw {
     this.address = address;
   }
 
-  public String getAsset() {
-    return asset;
+  public String getCoin() {
+    return coin;
   }
 
-  public void setAsset(String asset) {
-    this.asset = asset;
+  public void setCoin(String coin) {
+    this.coin = coin;
   }
 
   public String getApplyTime() {
@@ -74,14 +72,6 @@ public class Withdraw {
 
   public void setApplyTime(String applyTime) {
     this.applyTime = applyTime;
-  }
-
-  public String getSuccessTime() {
-    return successTime;
-  }
-
-  public void setSuccessTime(String successTime) {
-    this.successTime = successTime;
   }
 
   public String getTxId() {
@@ -113,9 +103,8 @@ public class Withdraw {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
         .append("amount", amount)
         .append("address", address)
-        .append("asset", asset)
+        .append("coin", coin)
         .append("applyTime", applyTime)
-        .append("successTime", successTime)
         .append("txId", txId)
         .append("id", id)
         .append("status", status)

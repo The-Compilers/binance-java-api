@@ -275,10 +275,40 @@ public interface BinanceApiRestClient {
 
   /**
    * Fetch account withdraw history.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
+   * Comments from the docs:
+   * Please notice the default startTime and endTime to make sure that time interval is within 0-90 days.
+   * If both startTime and endTime are sent, time between startTime and endTime must be less than 90 days.
+   * If withdrawOrderId is sent, time between startTime and endTime must be less than 7 days.
+   * If withdrawOrderId is sent, startTime and endTime are not sent, will return last 7 days records by default.
    *
+   * @param coin
+   * @param withdrawOrderId
+   * @param status          When specified, filter by transaction status:
+   *                        - 0:Email Sent
+   *                        - 1:Cancelled
+   *                        - 2:Awaiting Approval
+   *                        - 3:Rejected
+   *                        - 4:Processing
+   *                        - 5:Failure
+   *                        - 6:Completed
+   * @param offset
+   * @param limit           Default: 1000, Max: 1000
+   * @param startTime       Default: 90 days from current timestamp
+   * @param endTime         Default: present timestamp
    * @return withdraw history, containing a list of withdrawals
    */
-  WithdrawHistory getWithdrawHistory(String asset);
+  List<Withdraw> getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
+                                     Integer offset, Integer limit, Long startTime, Long endTime);
+
+  /**
+   * Fetch account withdraw history, with default values.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
+   *
+   * @param coin The coin to look withdrawals for
+   * @return withdraw history, containing a list of withdrawals
+   */
+  List<Withdraw> getWithdrawHistory(String coin);
 
   /**
    * Fetch deposit address.

@@ -152,9 +152,45 @@ public interface BinanceApiService {
   @GET("/wapi/v3/depositHistory.html")
   Call<DepositHistory> getDepositHistory(@Query("asset") String asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
+  /**
+   * Withdraw History.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
+   * Comments from the docs:
+   * Please notice the default startTime and endTime to make sure that time interval is within 0-90 days.
+   * If both startTime and endTime are sent, time between startTime and endTime must be less than 90 days.
+   * If withdrawOrderId is sent, time between startTime and endTime must be less than 7 days.
+   * If withdrawOrderId is sent, startTime and endTime are not sent, will return last 7 days records by default.
+   *
+   * @param coin
+   * @param withdrawOrderId
+   * @param status          When specified, filter by transaction status:
+   *                        - 0:Email Sent
+   *                        - 1:Cancelled
+   *                        - 2:Awaiting Approval
+   *                        - 3:Rejected
+   *                        - 4:Processing
+   *                        - 5:Failure
+   *                        - 6:Completed
+   * @param offset
+   * @param limit           Default: 1000, Max: 1000
+   * @param startTime       Default: 90 days from current timestamp
+   * @param endTime         Default: present timestamp
+   * @param recvWindow
+   * @param timestamp
+   * @return HTTP Call for the API endpoint
+   */
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
-  @GET("/wapi/v3/withdrawHistory.html")
-  Call<WithdrawHistory> getWithdrawHistory(@Query("asset") String asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  @GET("/sapi/v1/capital/withdraw/history")
+  Call<List<Withdraw>> getWithdrawHistory(
+      @Query("coin") String coin,
+      @Query("withdrawOrderId") String withdrawOrderId,
+      @Query("status") Integer status,
+      @Query("offset") Integer offset,
+      @Query("limit") Integer limit,
+      @Query("startTime") Long startTime,
+      @Query("endTime") Long endTime,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp);
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
   @GET("/wapi/v3/depositAddress.html")

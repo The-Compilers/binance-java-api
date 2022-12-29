@@ -3,12 +3,13 @@ package com.binance.api.client;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.DepositAddress;
 import com.binance.api.client.domain.account.DepositHistory;
+import com.binance.api.client.domain.account.ExtendedAssetBalance;
 import com.binance.api.client.domain.account.NewOrder;
 import com.binance.api.client.domain.account.NewOrderResponse;
 import com.binance.api.client.domain.account.Order;
 import com.binance.api.client.domain.account.Trade;
 import com.binance.api.client.domain.account.TradeHistoryItem;
-import com.binance.api.client.domain.account.WithdrawHistory;
+import com.binance.api.client.domain.account.Withdraw;
 import com.binance.api.client.domain.account.WithdrawResult;
 import com.binance.api.client.domain.account.request.AllOrdersRequest;
 import com.binance.api.client.domain.account.request.CancelOrderRequest;
@@ -227,6 +228,18 @@ public interface BinanceApiAsyncRestClient {
   void getAccount(BinanceApiCallback<Account> callback);
 
   /**
+   * Get User account information.
+   *
+   * @param asset            When specified, include only the given asset. When null, get
+   *                         balances for all assets
+   * @param needBtcValuation When true, include value in BTC for each asset.
+   * @return A list of all user assets with non-zero balances (or only the one asset,
+   * when specified)
+   */
+  void getUserAssets(String asset, boolean needBtcValuation,
+                     BinanceApiCallback<List<ExtendedAssetBalance>> callback);
+
+  /**
    * Get trades for a specific account and symbol.
    *
    * @param symbol   symbol to get trades from
@@ -275,10 +288,41 @@ public interface BinanceApiAsyncRestClient {
 
   /**
    * Fetch account withdraw history.
+   * See https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data
+   * Comments from the docs:
+   * Please notice the default startTime and endTime to make sure that time interval is within 0-90 days.
+   * If both startTime and endTime are sent, time between startTime and endTime must be less than 90 days.
+   * If withdrawOrderId is sent, time between startTime and endTime must be less than 7 days.
+   * If withdrawOrderId is sent, startTime and endTime are not sent, will return last 7 days records by default.
    *
-   * @param callback the callback that handles the response and returns the withdraw history
+   * @param coin
+   * @param withdrawOrderId
+   * @param status          When specified, filter by transaction status:
+   *                        - 0:Email Sent
+   *                        - 1:Cancelled
+   *                        - 2:Awaiting Approval
+   *                        - 3:Rejected
+   *                        - 4:Processing
+   *                        - 5:Failure
+   *                        - 6:Completed
+   * @param offset
+   * @param limit           Default: 1000, Max: 1000
+   * @param startTime       Default: 90 days from current timestamp
+   * @param endTime         Default: present timestamp
+   * @param callback        the callback that handles the response and returns the withdrawal history
    */
-  void getWithdrawHistory(String asset, BinanceApiCallback<WithdrawHistory> callback);
+  void getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
+                          Integer offset, Integer limit, Long startTime, Long endTime,
+                          BinanceApiCallback<List<Withdraw>> callback);
+
+  /**
+   * Fetch account withdraw history.
+   *
+   * @param coin     The coin in the withdrawals
+   * @param callback the callback that handles the response and returns the withdrawal history
+   */
+  void getWithdrawHistory(String coin,
+                          BinanceApiCallback<List<Withdraw>> callback);
 
   /**
    * Fetch deposit address.
