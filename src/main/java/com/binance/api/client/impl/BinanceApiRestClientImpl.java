@@ -215,8 +215,11 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public WithdrawResult withdraw(String asset, String address, String amount, String name, String addressTag) {
-    return executeSync(binanceApiService.withdraw(asset, address, amount, name, addressTag,
+  public WithdrawResult withdraw(String coin, String withdrawOrderId, String network,
+                                 String address, String amount, String name, String addressTag,
+                                 Boolean transactionFeeFlag) {
+    return executeSync(binanceApiService.withdraw(coin, withdrawOrderId, network, address,
+        addressTag, amount, transactionFeeFlag, name,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
@@ -226,15 +229,22 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public DepositHistory getDepositHistory(String asset) {
-    return executeSync(binanceApiService.getDepositHistory(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        System.currentTimeMillis()));
+  public List<Deposit> getDepositHistory(String coin) {
+    return getDepositHistory(coin, null, null, null, null, null);
+  }
+
+  @Override
+  public List<Deposit> getDepositHistory(String coin, Integer status, Long startTime, Long endTime,
+                                         Integer offset, Integer limit) {
+    return executeSync(binanceApiService.getDepositHistory(coin, status, startTime, endTime,
+        offset, limit,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
   @Override
   public List<Withdraw> getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
-                                            Integer offset, Integer limit,
-                                            Long startTime, Long endTime) {
+                                           Integer offset, Integer limit,
+                                           Long startTime, Long endTime) {
     return executeSync(binanceApiService.getWithdrawHistory(coin, withdrawOrderId, status, offset,
         limit, startTime, endTime, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
         System.currentTimeMillis()));
@@ -246,9 +256,9 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public DepositAddress getDepositAddress(String asset) {
-    return executeSync(binanceApiService.getDepositAddress(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        System.currentTimeMillis()));
+  public DepositAddress getDepositAddress(String coin, String network) {
+    return executeSync(binanceApiService.getDepositAddress(coin, network,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
   @Override

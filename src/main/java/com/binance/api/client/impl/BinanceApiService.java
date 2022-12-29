@@ -143,14 +143,47 @@ public interface BinanceApiService {
                                 @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
-  @POST("/wapi/v3/withdraw.html")
-  Call<WithdrawResult> withdraw(@Query("asset") String asset, @Query("address") String address, @Query("amount") String amount, @Query("name") String name, @Query("addressTag") String addressTag,
-                                @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  @POST("/sapi/v1/capital/withdraw/apply")
+  Call<WithdrawResult> withdraw(
+      @Query("coin") String coin,
+      @Query("withdrawOrderId") String withdrawOrderId,
+      @Query("network") String network,
+      @Query("address") String address,
+      @Query("addressTag") String addressTag,
+      @Query("amount") String amount,
+      @Query("transactionFeeFlag") Boolean feeFlag,
+      @Query("name") String name,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 
 
+  /**
+   * Deposit history.
+   *
+   * @param coin       The coin to look the history for.
+   * @param status     When specified, filter by transaction status:
+   *                   - 0:Email Sent
+   *                   - 1:Cancelled
+   *                   - 2:Awaiting Approval
+   *                   - 3:Rejected
+   *                   - 4:Processing
+   *                   - 5:Failure
+   *                   - 6:Completed
+   * @param startTime  Default: 90 days from current timestamp
+   * @param endTime    Default: present timestamp
+   * @param offset
+   * @param limit      Default: 1000, Max: 1000
+   * @param recvWindow
+   * @param timestamp
+   * @return
+   */
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
-  @GET("/wapi/v3/depositHistory.html")
-  Call<DepositHistory> getDepositHistory(@Query("asset") String asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  @GET("/sapi/v1/capital/deposit/hisrec")
+  Call<List<Deposit>> getDepositHistory(@Query("coin") String coin, @Query("status") Integer status,
+                                        @Query("startTime") Long startTime, @Query("endTime") Long endTime,
+                                        @Query("offset") Integer offset, @Query("limit") Integer limit,
+                                        @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
   /**
    * Withdraw History.
@@ -193,8 +226,9 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp);
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
-  @GET("/wapi/v3/depositAddress.html")
-  Call<DepositAddress> getDepositAddress(@Query("asset") String asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  @GET("/sapi/v1/capital/deposit/address")
+  Call<DepositAddress> getDepositAddress(@Query("coin") String asset, @Query("network")
+  String network, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
   @POST("/sapi/v1/asset/dust")

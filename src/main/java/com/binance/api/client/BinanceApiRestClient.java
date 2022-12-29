@@ -248,16 +248,19 @@ public interface BinanceApiRestClient {
 
   /**
    * Submit a withdrawal request.
-   * <p>
-   * Enable Withdrawals option has to be active in the API settings.
+   * Withdrawals option has to be active in the API settings.
    *
-   * @param asset      asset symbol to withdraw
-   * @param address    address to withdraw to
-   * @param amount     amount to withdraw
-   * @param name       description/alias of the address
-   * @param addressTag Secondary address identifier for coins like XRP,XMR etc.
+   * @param coin               asset symbol to withdraw
+   * @param withdrawOrderId    client id for withdraw
+   * @param network            the network to use for the withdrawal
+   * @param address            address to withdraw to
+   * @param addressTag         Secondary address identifier for coins like XRP,XMR etc.
+   * @param amount             amount to withdraw
+   * @param transactionFeeFlag When making internal transfer, true for returning the fee to the destination account; false for returning the fee back to the departure account. Default false.
+   * @param name               Description of the address. Space in name should be encoded into %20.
    */
-  WithdrawResult withdraw(String asset, String address, String amount, String name, String addressTag);
+  WithdrawResult withdraw(String coin, String withdrawOrderId, String network, String address, String amount,
+                          String name, String addressTag, Boolean transactionFeeFlag);
 
   /**
    * Conver a list of assets to BNB
@@ -271,7 +274,24 @@ public interface BinanceApiRestClient {
    *
    * @return deposit history, containing a list of deposits
    */
-  DepositHistory getDepositHistory(String asset);
+  List<Deposit> getDepositHistory(String asset);
+
+  /**
+   * Fetch account deposit history.
+   *
+   * @param coin      the asset to get the history for
+   * @param status    When specified, filter by transaction status:
+   *                  - 0: pending
+   *                  - 6: credited but cannot withdraw
+   *                  - 1: success)
+   * @param startTime Default: 90 days from current timestamp
+   * @param endTime   Default: present timestamp
+   * @param offset    Default:0
+   * @param limit     Default:1000, Max:1000
+   * @return deposit history, containing a list of deposits
+   */
+  List<Deposit> getDepositHistory(String coin, Integer status, Long startTime, Long endTime,
+                                  Integer offset, Integer limit);
 
   /**
    * Fetch account withdraw history.
@@ -299,7 +319,7 @@ public interface BinanceApiRestClient {
    * @return withdraw history, containing a list of withdrawals
    */
   List<Withdraw> getWithdrawHistory(String coin, String withdrawOrderId, Integer status,
-                                     Integer offset, Integer limit, Long startTime, Long endTime);
+                                    Integer offset, Integer limit, Long startTime, Long endTime);
 
   /**
    * Fetch account withdraw history, with default values.
@@ -313,9 +333,11 @@ public interface BinanceApiRestClient {
   /**
    * Fetch deposit address.
    *
+   * @param coin   The coin to get the address for
+   * @param network The network to use for deposit
    * @return deposit address for a given asset.
    */
-  DepositAddress getDepositAddress(String asset);
+  DepositAddress getDepositAddress(String coin, String network);
 
   /**
    * Get User account information.
