@@ -292,6 +292,17 @@ public interface BinanceApiRestClient {
    */
   DepositAddress getDepositAddress(String asset);
 
+  /**
+   * Get User account information.
+   *
+   * @param asset            When specified, include only the given asset. When null, get
+   *                         balances for all assets
+   * @param needBtcValuation When true, include value in BTC for each asset.
+   * @return A list of all user assets with non-zero balances (or only the one asset,
+   * when specified)
+   */
+  List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation);
+
   // User stream endpoints
 
   /**

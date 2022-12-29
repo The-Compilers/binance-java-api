@@ -249,6 +249,14 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
         System.currentTimeMillis()));
   }
 
+  @Override
+  public List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation) {
+    return executeSync(binanceApiService.getUserAssets(asset, needBtcValuation,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
+        System.currentTimeMillis())
+    );
+  }
+
   // User stream endpoints
 
   @Override
