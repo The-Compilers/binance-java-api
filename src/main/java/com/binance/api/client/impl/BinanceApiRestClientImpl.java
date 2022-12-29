@@ -5,6 +5,8 @@ import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
+import com.binance.api.client.domain.fiat.FiatTransactionType;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.market.*;
@@ -284,5 +286,40 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public void closeUserDataStream(String listenKey) {
     executeSync(binanceApiService.closeAliveUserDataStream(listenKey));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
+                                                      Integer page, Integer rows) {
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawal(
+        FiatTransactionType.DEPOSIT.toString(), startTime, endTime, page, rows,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime) {
+    return getFiatDepositHistory(startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getRecentFiatDepositHistory() {
+    return getFiatDepositHistory(null, null, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows) {
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawal(
+        FiatTransactionType.WITHDRAW.toString(), startTime, endTime, page, rows,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime) {
+    return getFiatWithdrawHistory(startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getRecentFiatWithdrawHistory() {
+    return getFiatWithdrawHistory(null, null, null, null);
   }
 }

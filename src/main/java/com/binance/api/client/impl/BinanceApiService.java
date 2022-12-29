@@ -8,6 +8,7 @@ import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -264,5 +265,18 @@ public interface BinanceApiService {
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
   @PUT("/sapi/v1/userDataStream")
   Call<Void> keepAliveMarginUserDataStream(@Query("listenKey") String listenKey);
+
+  // Fiat endpoints
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/fiat/orders")
+  Call<FiatTransactionHistory> getFiatDepositOrWithdrawal(
+      @Query("transactionType") String transactionType,
+      @Query("beginTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("page") Integer page, // default 1
+      @Query("rows") Integer rows, // default 100, max 500
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 
 }

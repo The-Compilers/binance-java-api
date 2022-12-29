@@ -2,6 +2,7 @@ package com.binance.api.client;
 
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.market.AggTrade;
@@ -333,7 +334,7 @@ public interface BinanceApiRestClient {
   /**
    * Fetch deposit address.
    *
-   * @param coin   The coin to get the address for
+   * @param coin    The coin to get the address for
    * @param network The network to use for deposit
    * @return deposit address for a given asset.
    */
@@ -372,4 +373,63 @@ public interface BinanceApiRestClient {
    * @param listenKey listen key that identifies a data stream
    */
   void closeUserDataStream(String listenKey);
+
+  // Fiat endpoints
+
+  /**
+   * Get FIAT currency deposit history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
+                                               Integer page, Integer rows);
+
+  /**
+   * Get FIAT currency deposit history, with default paging parameters.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime);
+
+  /**
+   * Get recent FIAT currency deposit history.
+   *
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getRecentFiatDepositHistory();
+
+  /**
+   * Get FIAT currency withdrawal history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime,
+                                                Integer page, Integer rows);
+
+  /**
+   * Get FIAT currency withdrawal history, with default paging parameters.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime);
+
+
+  /**
+   * Get recent FIAT currency withdrawal history.
+   *
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getRecentFiatWithdrawHistory();
 }

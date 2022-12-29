@@ -17,6 +17,7 @@ import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -384,4 +385,65 @@ public interface BinanceApiAsyncRestClient {
    * @param callback  the callback that handles the response which contains a listenKey
    */
   void closeUserDataStream(String listenKey, BinanceApiCallback<Void> callback);
+
+  // Fiat endpoints
+
+  /**
+   * Get FIAT currency deposit history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer rows,
+                             BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency deposit history, with default paging.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatDepositHistory(Long startTime, Long endTime,
+                             BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get recent FIAT currency deposit history.
+   *
+   * @param callback Callback which will handle the result
+   */
+  void getRecentFiatDepositHistory(BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency withdrawal history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows,
+                              BinanceApiCallback<FiatTransactionHistory> callback);
+
+
+  /**
+   * Get FIAT currency withdrawal history, with default paging.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatWithdrawHistory(Long startTime, Long endTime,
+                              BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get recent FIAT currency withdrawal history.
+   *
+   * @param callback Callback which will handle the result
+   */
+  void getRecentFiatWithdrawHistory(BinanceApiCallback<FiatTransactionHistory> callback);
 }

@@ -21,6 +21,8 @@ import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
+import com.binance.api.client.domain.fiat.FiatTransactionType;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -284,5 +286,45 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   @Override
   public void closeUserDataStream(String listenKey, BinanceApiCallback<Void> callback) {
     binanceApiService.closeAliveUserDataStream(listenKey).enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  // Fiat endpoints
+  @Override
+  public void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer rows,
+                                    BinanceApiCallback<FiatTransactionHistory> callback) {
+    binanceApiService.getFiatDepositOrWithdrawal(
+            FiatTransactionType.DEPOSIT.toString(),
+            startTime, endTime, page, rows,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getFiatDepositHistory(Long startTime, Long endTime, BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatDepositHistory(startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentFiatDepositHistory(BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatDepositHistory(null, null, null, null, callback);
+  }
+
+  @Override
+  public void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows, BinanceApiCallback<FiatTransactionHistory> callback) {
+    binanceApiService.getFiatDepositOrWithdrawal(
+            FiatTransactionType.WITHDRAW.toString(),
+            startTime, endTime, page, rows,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getFiatWithdrawHistory(Long startTime, Long endTime, BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatWithdrawHistory(startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentFiatWithdrawHistory(BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatWithdrawHistory(null, null, null, null, callback);
   }
 }
