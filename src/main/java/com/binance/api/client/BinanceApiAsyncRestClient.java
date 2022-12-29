@@ -52,7 +52,7 @@ public interface BinanceApiAsyncRestClient {
   void getExchangeInfo(BinanceApiCallback<ExchangeInfo> callback);
 
   /**
-   * ALL supported assets and whether or not they can be withdrawn.
+   * ALL supported assets and whether they can be withdrawn.
    */
   void getAllAssets(BinanceApiCallback<List<Asset>> callback);
 
@@ -145,14 +145,14 @@ public interface BinanceApiAsyncRestClient {
   void getAll24HrPriceStatistics(BinanceApiCallback<List<TickerStatistics>> callback);
 
   /**
-   * Get Latest price for all symbols (asynchronous).
+   * Get the latest price for all symbols (asynchronous).
    *
    * @param callback the callback that handles the response
    */
   void getAllPrices(BinanceApiCallback<List<TickerPrice>> callback);
 
   /**
-   * Get latest price for <code>symbol</code> (asynchronous).
+   * Get the latest price for <code>symbol</code> (asynchronous).
    *
    * @param symbol   ticker symbol (e.g. ETHBTC)
    * @param callback the callback that handles the response
@@ -254,7 +254,7 @@ public interface BinanceApiAsyncRestClient {
   void getMyTrades(String symbol, BinanceApiCallback<List<Trade>> callback);
 
   /**
-   * Submit a withdraw request.
+   * Submit a withdrawal request.
    * <p>
    * Enable Withdrawals option has to be active in the API settings.
    *

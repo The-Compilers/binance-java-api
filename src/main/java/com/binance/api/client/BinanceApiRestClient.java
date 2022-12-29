@@ -39,7 +39,7 @@ public interface BinanceApiRestClient {
   ExchangeInfo getExchangeInfo();
 
   /**
-   * @return All the supported assets and whether or not they can be withdrawn.
+   * @return All the supported assets and whether they can be withdrawn.
    */
   List<Asset> getAllAssets();
 
@@ -125,12 +125,12 @@ public interface BinanceApiRestClient {
   List<TickerStatistics> getAll24HrPriceStatistics();
 
   /**
-   * Get Latest price for all symbols.
+   * Get the latest price for all symbols.
    */
   List<TickerPrice> getAllPrices();
 
   /**
-   * Get latest price for <code>symbol</code>.
+   * Get the latest price for <code>symbol</code>.
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
    */
@@ -188,14 +188,6 @@ public interface BinanceApiRestClient {
    * @return a list of all account orders
    */
   List<Order> getAllOrders(AllOrdersRequest orderRequest);
-
-  /**
-   * Send in a new OCO;
-   *
-   * @param oco the OCO to submit
-   * @return a response containing details about the newly placed OCO.
-   */
-  NewOCOResponse newOCO(NewOCO oco);
 
   /**
    * Cancel an entire Order List
@@ -260,7 +252,7 @@ public interface BinanceApiRestClient {
   List<Trade> getMyTrades(String symbol, Long fromId);
 
   /**
-   * Submit a withdraw request.
+   * Submit a withdrawal request.
    * <p>
    * Enable Withdrawals option has to be active in the API settings.
    *
@@ -277,7 +269,7 @@ public interface BinanceApiRestClient {
    *
    * @param asset the list of assets to convert
    */
-  DustTransferResponse dustTranfer(List<String> asset);
+  DustTransferResponse dustTransfer(List<String> asset);
 
   /**
    * Fetch account deposit history.
@@ -292,13 +284,6 @@ public interface BinanceApiRestClient {
    * @return withdraw history, containing a list of withdrawals
    */
   WithdrawHistory getWithdrawHistory(String asset);
-
-  /**
-   * Fetch sub-account transfer history.
-   *
-   * @return sub-account transfers
-   */
-  List<SubAccountTransfer> getSubAccountTransfers();
 
   /**
    * Fetch deposit address.

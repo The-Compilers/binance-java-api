@@ -10,8 +10,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.io.IOException;
 
 /**
- * Custom deserializer for an AssetBalance, since the streaming API returns an object in the format {"a":"symbol","f":"free","l":"locked"},
- * which is different than the format used in the REST API.
+ * Custom deserializer for an AssetBalance, since the streaming API returns an object in
+ * the format {"a":"symbol","f":"free","l":"locked"},
+ * which is different from the format used in the REST API.
  */
 public class AssetBalanceDeserializer extends JsonDeserializer<AssetBalance> {
 

@@ -169,14 +169,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public NewOCOResponse newOCO(NewOCO oco) {
-    return executeSync(binanceApiService.newOCO(oco.getSymbol(), oco.getListClientOrderId(), oco.getSide(),
-        oco.getQuantity(), oco.getLimitClientOrderId(), oco.getPrice(), oco.getLimitIcebergQty(),
-        oco.getStopClientOrderId(), oco.getStopPrice(), oco.getStopLimitPrice(), oco.getStopIcebergQty(),
-        oco.getStopLimitTimeInForce(), oco.getNewOrderRespType(), oco.getRecvWindow(), oco.getTimestamp()));
-  }
-
-  @Override
   public CancelOrderListResponse cancelOrderList(CancelOrderListRequest cancelOrderListRequest) {
     return executeSync(binanceApiService.cancelOrderList(cancelOrderListRequest.getSymbol(), cancelOrderListRequest.getOrderListId(),
         cancelOrderListRequest.getListClientOrderId(), cancelOrderListRequest.getNewClientOrderId(),
@@ -235,7 +227,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public DustTransferResponse dustTranfer(List<String> asset) {
+  public DustTransferResponse dustTransfer(List<String> asset) {
     return executeSync(binanceApiService.dustTransfer(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
@@ -249,11 +241,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   public WithdrawHistory getWithdrawHistory(String asset) {
     return executeSync(binanceApiService.getWithdrawHistory(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
         System.currentTimeMillis()));
-  }
-
-  @Override
-  public List<SubAccountTransfer> getSubAccountTransfers() {
-    return executeSync(binanceApiService.getSubAccountTransfers(System.currentTimeMillis()));
   }
 
   @Override
