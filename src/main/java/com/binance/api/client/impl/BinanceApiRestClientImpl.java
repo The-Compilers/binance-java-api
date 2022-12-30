@@ -5,6 +5,8 @@ import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.fiat.FiatTransactionType;
 import com.binance.api.client.domain.general.Asset;
@@ -291,7 +293,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
                                                       Integer page, Integer rows) {
-    return executeSync(binanceApiService.getFiatDepositOrWithdrawal(
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
         FiatTransactionType.DEPOSIT.toString(), startTime, endTime, page, rows,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
@@ -308,7 +310,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows) {
-    return executeSync(binanceApiService.getFiatDepositOrWithdrawal(
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
         FiatTransactionType.WITHDRAW.toString(), startTime, endTime, page, rows,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
@@ -321,5 +323,23 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public FiatTransactionHistory getRecentFiatWithdrawHistory() {
     return getFiatWithdrawHistory(null, null, null, null);
+  }
+
+  @Override
+  public FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                                  Integer page, Integer rows) {
+    return executeSync(binanceApiService.getFiatPaymentHistory(type.toString(),
+        startTime, endTime, page, rows,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime) {
+    return getFiatPaymentHistory(type, startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type) {
+    return getFiatPaymentHistory(type, null, null, null, null);
   }
 }

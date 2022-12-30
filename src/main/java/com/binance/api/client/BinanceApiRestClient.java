@@ -2,6 +2,8 @@ package com.binance.api.client;
 
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.Asset;
@@ -432,4 +434,35 @@ public interface BinanceApiRestClient {
    * @return Withdrawal history, with a list of FiatTransaction objects inside
    */
   FiatTransactionHistory getRecentFiatWithdrawHistory();
+
+  /**
+   * Get FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                           Integer page, Integer rows);
+
+  /**
+   * Get FIAT currency payment history, with default paging parameters.
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime);
+
+  /**
+   * Get recent FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type Filter by payment type: buy or sell
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type);
 }

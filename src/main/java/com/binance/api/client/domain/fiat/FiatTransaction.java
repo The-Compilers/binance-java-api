@@ -10,7 +10,7 @@ public class FiatTransaction {
   String amount;
   // Trade fee
   String totalFee;
-  // Trade method: "BankAccount", etc
+  // Trade method: "BankAccount", "Card", etc
   String method;
   // Expired, Processing, Failed, Successful, Finished, Refunding, Refunded,
   // Refund Failed, Order Partial credit Stopped

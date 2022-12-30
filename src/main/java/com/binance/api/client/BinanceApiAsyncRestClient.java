@@ -17,6 +17,8 @@ import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
@@ -446,4 +448,41 @@ public interface BinanceApiAsyncRestClient {
    * @param callback Callback which will handle the result
    */
   void getRecentFiatWithdrawHistory(BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param rows      Number of rows (records) per page
+   * @param callback  Callback which will handle the result
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                             Integer page, Integer rows,
+                             BinanceApiCallback<FiatPaymentHistory> callback);
+
+  /**
+   * Get FIAT currency payment history, with default paging parameters.
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                             BinanceApiCallback<FiatPaymentHistory> callback);
+
+  /**
+   * Get recent FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type     Filter by payment type: buy or sell
+   * @param callback Callback which will handle the result
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  void getRecentFiatPaymentHistory(FiatPaymentType type,
+                                   BinanceApiCallback<FiatPaymentHistory> callback);
 }

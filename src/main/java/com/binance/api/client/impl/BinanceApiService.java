@@ -8,6 +8,7 @@ import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
@@ -269,8 +270,8 @@ public interface BinanceApiService {
   // Fiat endpoints
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
   @GET("/sapi/v1/fiat/orders")
-  Call<FiatTransactionHistory> getFiatDepositOrWithdrawal(
-      @Query("transactionType") String transactionType,
+  Call<FiatTransactionHistory> getFiatDepositOrWithdrawalHistory(
+      @Query("transactionType") String transactionType, // 0: deposit; 1: withdrawal
       @Query("beginTime") Long beginTime,
       @Query("endTime") Long endTime,
       @Query("page") Integer page, // default 1
@@ -279,4 +280,15 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/fiat/payments")
+  Call<FiatPaymentHistory> getFiatPaymentHistory(
+      @Query("transactionType") String transactionType, // 0: buy; 1: sell
+      @Query("beginTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("page") Integer page, // default 1
+      @Query("rows") Integer rows, // default 100, max 500
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 }
