@@ -1,7 +1,5 @@
 package com.binance.api.examples;
 
-import com.binance.api.client.config.BinanceApiConfig;
-import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.constant.TimeRange;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
 
