@@ -6,9 +6,9 @@ import com.binance.api.client.domain.fiat.FiatPaymentType;
 /**
  * Examples of Fiat endpoints.
  */
-public class FiatExamples extends AuthenticatedExampleBase {
+public class FiatExample extends AuthenticatedExampleBase {
   public static void main(String[] args) {
-    FiatExamples examples = new FiatExamples();
+    FiatExample examples = new FiatExample();
     examples.run();
   }
 
