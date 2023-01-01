@@ -458,7 +458,6 @@ public interface BinanceApiAsyncRestClient {
    * @param page      The page number, if there are multiple pages
    * @param perPage   Number of rows (records) per page
    * @param callback  Callback which will handle the result
-   * @return Payment history, with a list of FiatPayment objects inside
    */
   void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
                              Integer page, Integer perPage,
@@ -471,7 +470,6 @@ public interface BinanceApiAsyncRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param callback  Callback which will handle the result
-   * @return Payment history, with a list of FiatPayment objects inside
    */
   void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
                              BinanceApiCallback<FiatPaymentHistory> callback);
@@ -481,7 +479,6 @@ public interface BinanceApiAsyncRestClient {
    *
    * @param type     Filter by payment type: buy or sell
    * @param callback Callback which will handle the result
-   * @return Payment history, with a list of FiatPayment objects inside
    */
   void getRecentFiatPaymentHistory(FiatPaymentType type,
                                    BinanceApiCallback<FiatPaymentHistory> callback);
