@@ -396,10 +396,10 @@ public interface BinanceApiAsyncRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of records per page
    * @param callback  Callback which will handle the result
    */
-  void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer rows,
+  void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer perPage,
                              BinanceApiCallback<FiatTransactionHistory> callback);
 
   /**
@@ -425,10 +425,10 @@ public interface BinanceApiAsyncRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of rows (records) per page
    * @param callback  Callback which will handle the result
    */
-  void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows,
+  void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer perPage,
                               BinanceApiCallback<FiatTransactionHistory> callback);
 
 
@@ -456,12 +456,12 @@ public interface BinanceApiAsyncRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of rows (records) per page
    * @param callback  Callback which will handle the result
    * @return Payment history, with a list of FiatPayment objects inside
    */
   void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
-                             Integer page, Integer rows,
+                             Integer page, Integer perPage,
                              BinanceApiCallback<FiatPaymentHistory> callback);
 
   /**

@@ -384,11 +384,11 @@ public interface BinanceApiRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of rows (records) per page
    * @return Deposit history, with a list of FiatTransaction objects inside
    */
   FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
-                                               Integer page, Integer rows);
+                                               Integer page, Integer perPage);
 
   /**
    * Get FIAT currency deposit history, with default paging parameters.
@@ -412,11 +412,11 @@ public interface BinanceApiRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of rows (records) per page
    * @return Withdrawal history, with a list of FiatTransaction objects inside
    */
   FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime,
-                                                Integer page, Integer rows);
+                                                Integer page, Integer perPage);
 
   /**
    * Get FIAT currency withdrawal history, with default paging parameters.
@@ -442,11 +442,11 @@ public interface BinanceApiRestClient {
    * @param startTime Return only transactions where time >= startTime
    * @param endTime   Return only transactions where time <= endTime
    * @param page      The page number, if there are multiple pages
-   * @param rows      Number of rows (records) per page
+   * @param perPage   Number of rows (records) per page
    * @return Payment history, with a list of FiatPayment objects inside
    */
   FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
-                                           Integer page, Integer rows);
+                                           Integer page, Integer perPage);
 
   /**
    * Get FIAT currency payment history, with default paging parameters.

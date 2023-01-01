@@ -292,9 +292,9 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
-                                                      Integer page, Integer rows) {
+                                                      Integer page, Integer perPage) {
     return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
-        FiatTransactionType.DEPOSIT.toString(), startTime, endTime, page, rows,
+        FiatTransactionType.DEPOSIT.toString(), startTime, endTime, page, perPage,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
@@ -309,9 +309,10 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer rows) {
+  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime,
+                                                       Integer page, Integer perPage) {
     return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
-        FiatTransactionType.WITHDRAW.toString(), startTime, endTime, page, rows,
+        FiatTransactionType.WITHDRAW.toString(), startTime, endTime, page, perPage,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
@@ -327,9 +328,9 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
-                                                  Integer page, Integer rows) {
+                                                  Integer page, Integer perPage) {
     return executeSync(binanceApiService.getFiatPaymentHistory(type.toString(),
-        startTime, endTime, page, rows,
+        startTime, endTime, page, perPage,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 
