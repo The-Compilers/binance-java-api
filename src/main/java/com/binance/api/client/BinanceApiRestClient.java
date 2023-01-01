@@ -282,6 +282,12 @@ public interface BinanceApiRestClient {
   DustTransferLog getDustTransferHistory(Long startTime, Long endTime);
 
   /**
+   * Get recent history of dust transfer transactions, max 100 records per request.
+   * @return Dust transfer history
+   */
+  DustTransferLog getRecentDustTransferHistory();
+
+  /**
    * Convert a list of assets to BNB
    *
    * @param asset the list of assets to convert

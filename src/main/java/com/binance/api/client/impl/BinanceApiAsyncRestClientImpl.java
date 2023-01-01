@@ -202,6 +202,11 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
+  public void getRecentDustTransferHistory(BinanceApiCallback<DustTransferLog> callback) {
+    getDustTransferHistory(null, null, callback);
+  }
+
+  @Override
   public void getUserAssets(String asset, boolean needBtcValuation,
                             BinanceApiCallback<List<ExtendedAssetBalance>> callback) {
     Call<List<ExtendedAssetBalance>> call = binanceApiService.getUserAssets(

@@ -234,8 +234,13 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public DustTransferLog getDustTransferHistory(Long startTime, Long endTime) {
-    return executeSync(binanceApiService.dustLog(startTime, endTime,
+    return executeSync(binanceApiService.getDustLog(startTime, endTime,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public DustTransferLog getRecentDustTransferHistory() {
+    return getDustTransferHistory(null, null);
   }
 
   @Override

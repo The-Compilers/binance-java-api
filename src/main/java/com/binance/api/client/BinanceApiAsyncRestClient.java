@@ -239,6 +239,12 @@ public interface BinanceApiAsyncRestClient {
                               BinanceApiCallback<DustTransferLog> callback);
 
   /**
+   * Get recent history of dust transfer transactions, max 100 records.
+   * @param callback  the callback that handles the response
+   */
+  void getRecentDustTransferHistory(BinanceApiCallback<DustTransferLog> callback);
+
+  /**
    * Get User account information.
    *
    * @param asset            When specified, include only the given asset. When null, get
