@@ -5,6 +5,9 @@ import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.fiat.FiatPaymentHistory;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
@@ -381,5 +384,11 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset) {
     return getSavingsInterestHistory(type, asset, null, null, null, null);
+  }
+
+  @Override
+  public LendingAccountSummary getLendingAccountSummary() {
+    return executeSync(binanceApiService.getLendingAccount(
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 }

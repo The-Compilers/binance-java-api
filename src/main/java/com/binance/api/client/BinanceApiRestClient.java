@@ -2,6 +2,9 @@ package com.binance.api.client;
 
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.fiat.FiatPaymentHistory;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
@@ -363,7 +366,7 @@ public interface BinanceApiRestClient {
    * @return List of asset dividend records
    */
   AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
-                                              Integer limit);
+                                               Integer limit);
 
   /**
    * Get asset dividend record (history), with the default limit value.
@@ -378,7 +381,7 @@ public interface BinanceApiRestClient {
   /**
    * Get recent asset dividend record (history).
    *
-   * @param asset     The asset to query
+   * @param asset The asset to query
    * @return List of asset dividend records
    */
   AssetDividendHistory getRecentAssetDividendHistory(String asset);
@@ -533,4 +536,11 @@ public interface BinanceApiRestClient {
    * @return
    */
   List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset);
+
+  /**
+   * Get the summary of all lending accounts.
+   *
+   * @return Lending account summary
+   */
+  LendingAccountSummary getLendingAccountSummary();
 }

@@ -1,8 +1,8 @@
 package com.binance.api.examples;
 
 import com.binance.api.client.constant.TimeRange;
-import com.binance.api.client.domain.account.LendingType;
-import com.binance.api.client.domain.account.SavingsInterest;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import java.util.List;
 
 /**
@@ -17,6 +17,7 @@ public class SavingsExample extends AuthenticatedExampleBase {
   private void run() {
     printInterest("BTC", "2022-12");
     printInterest("ETH", "2022-11");
+    printSavingsAccountSummary();
   }
 
   private void printInterest(String asset, String month) {
@@ -27,4 +28,11 @@ public class SavingsExample extends AuthenticatedExampleBase {
     System.out.println(interests);
     System.out.println();
   }
+
+  private void printSavingsAccountSummary() {
+    System.out.println("Savings account summary: ");
+    System.out.println(client.getLendingAccountSummary());
+    System.out.println();
+  }
+
 }

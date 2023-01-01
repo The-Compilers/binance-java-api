@@ -1,4 +1,4 @@
-package com.binance.api.client.domain.account;
+package com.binance.api.client.domain.account.savings;
 
 /**
  * Type of Lending, as defined in the docs.

@@ -10,6 +10,9 @@ import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.event.ListenKey;
 import com.binance.api.client.domain.fiat.FiatPaymentHistory;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
@@ -205,7 +208,7 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   public void getAssetDividendHistory(String asset, Long startTime, Long endTime, Integer limit,
                                       BinanceApiCallback<AssetDividendHistory> callback) {
     binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
-        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
         .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
@@ -384,5 +387,12 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   public void getRecentSavingsInterestHistory(LendingType type, String asset,
                                               BinanceApiCallback<List<SavingsInterest>> callback) {
     getSavingsInterestHistory(type, asset, null, null, null, null, callback);
+  }
+
+  @Override
+  public void getLendingAccountSummary(BinanceApiCallback<LendingAccountSummary> callback) {
+    binanceApiService.getLendingAccount(
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 }

@@ -7,6 +7,8 @@ import com.binance.api.client.domain.TimeInForce;
 import com.binance.api.client.domain.account.*;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.event.ListenKey;
 import com.binance.api.client.domain.fiat.FiatPaymentHistory;
 import com.binance.api.client.domain.fiat.FiatTransactionHistory;
@@ -330,6 +332,13 @@ public interface BinanceApiService {
       @Query("endTime") Long endTime,
       @Query("current") Long page,
       @Query("size") Long size,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/lending/union/account")
+  Call<LendingAccountSummary> getLendingAccount(
       @Query("recvWindow") Long recvWindow,
       @Query("timestamp") Long timestamp
   );
