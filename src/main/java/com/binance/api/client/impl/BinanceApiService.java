@@ -291,4 +291,35 @@ public interface BinanceApiService {
       @Query("recvWindow") Long recvWindow,
       @Query("timestamp") Long timestamp
   );
+
+  // Savings endpoints
+
+  /**
+   * Get savings interest history for the user's account.
+   *
+   * @param lendingType "DAILY" for flexible, "ACTIVITY" for activity, "CUSTOMIZED_FIXED" for fixed
+   * @param asset       The asset which was put in the savings account (BTC, etc.)
+   * @param beginTime   Minimum timestamp for filtering the results
+   * @param endTime     Maximum timestamp for filtering the results The time between startTime
+   *                    and endTime cannot be longer than 30 days.
+   *                    If startTime and endTime are both not sent, then the last 30 days'
+   *                    data will be returned.
+   * @param page        Current querying page. Start from 1. Default: 1
+   * @param size        Items per "page", Default:10, Max:100
+   * @param recvWindow
+   * @param timestamp
+   * @return List of SavingsInterest objects
+   */
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/lending/union/interestHistory")
+  Call<List<SavingsInterest>> getSavingsInterestHistory(
+      @Query("lendingType") String lendingType,
+      @Query("asset") String asset,
+      @Query("startTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("current") Long page,
+      @Query("size") Long size,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 }

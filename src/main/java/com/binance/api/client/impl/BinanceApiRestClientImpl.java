@@ -343,4 +343,26 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   public FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type) {
     return getFiatPaymentHistory(type, null, null, null, null);
   }
+
+  // Savings endpoints
+
+  @Override
+  public List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset,
+                                                         Long startTime, Long endTime,
+                                                         Long page, Long perPage) {
+    return executeSync(binanceApiService.getSavingsInterestHistory(type.toString(), asset,
+        startTime, endTime, page, perPage,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset,
+                                                         Long startTime, Long endTime) {
+    return getSavingsInterestHistory(type, asset, startTime, endTime, null, null);
+  }
+
+  @Override
+  public List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset) {
+    return getSavingsInterestHistory(type, asset, null, null, null, null);
+  }
 }

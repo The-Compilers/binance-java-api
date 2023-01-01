@@ -465,4 +465,41 @@ public interface BinanceApiRestClient {
    * @return Payment history, with a list of FiatPayment objects inside
    */
   FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type);
+
+  // Savings endpoints
+
+  /**
+   * Get savings interest history for the user's account.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of records per page
+   * @return
+   */
+  List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                                  Long endTime, Long page, Long perPage);
+
+  /**
+   * Get savings interest history for the user's account, default paging settings.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return
+   */
+  List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                                  Long endTime);
+
+  /**
+   * Get recent savings interest history for the user's account.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @return
+   */
+  List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset);
 }
