@@ -217,6 +217,8 @@ public interface BinanceApiAsyncRestClient {
 
   /**
    * Get current account information using default parameters (async).
+   *
+   * @param callback the callback that handles the response
    */
   void getAccount(BinanceApiCallback<Account> callback);
 
@@ -226,11 +228,42 @@ public interface BinanceApiAsyncRestClient {
    * @param asset            When specified, include only the given asset. When null, get
    *                         balances for all assets
    * @param needBtcValuation When true, include value in BTC for each asset.
-   * @return A list of all user assets with non-zero balances (or only the one asset,
-   * when specified)
+   * @param callback         the callback that handles the response
    */
   void getUserAssets(String asset, boolean needBtcValuation,
                      BinanceApiCallback<List<ExtendedAssetBalance>> callback);
+
+  /**
+   * Get asset dividend record (history).
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param limit     Maximum records to return. Default 20 (when null), max 500.
+   * @param callback  the callback that handles the response
+   */
+  void getAssetDividendHistory(String asset, Long startTime, Long endTime, Integer limit,
+                               BinanceApiCallback<AssetDividendHistory> callback);
+
+  /**
+   * Get asset dividend record (history), with the default limit value.
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  the callback that handles the response
+   */
+  void getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                               BinanceApiCallback<AssetDividendHistory> callback);
+
+  /**
+   * Get recent asset dividend record (history).
+   *
+   * @param asset    The asset to query
+   * @param callback the callback that handles the response
+   */
+  void getRecentAssetDividendHistory(String asset,
+                                     BinanceApiCallback<AssetDividendHistory> callback);
 
   /**
    * Get trades for a specific account and symbol.

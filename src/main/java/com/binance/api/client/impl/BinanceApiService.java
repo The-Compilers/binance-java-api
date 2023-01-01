@@ -245,6 +245,17 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/asset/assetDividend")
+  Call<AssetDividendHistory> getAssetDividendRecord(
+      @Query("asset") String asset,
+      @Query("startTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("limit") Integer limit, // Default 20, max 500
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
   // User stream endpoints
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)

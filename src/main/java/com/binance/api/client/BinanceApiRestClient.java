@@ -353,6 +353,37 @@ public interface BinanceApiRestClient {
    */
   List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation);
 
+  /**
+   * Get asset dividend record (history).
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param limit     Maximum records to return. Default 20 (when null), max 500.
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                              Integer limit);
+
+  /**
+   * Get asset dividend record (history), with the default limit value.
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime);
+
+  /**
+   * Get recent asset dividend record (history).
+   *
+   * @param asset     The asset to query
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getRecentAssetDividendHistory(String asset);
+
+
   // User stream endpoints
 
   /**
@@ -497,8 +528,8 @@ public interface BinanceApiRestClient {
   /**
    * Get recent savings interest history for the user's account.
    *
-   * @param type      The type of lending
-   * @param asset     The asset in question
+   * @param type  The type of lending
+   * @param asset The asset in question
    * @return
    */
   List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset);

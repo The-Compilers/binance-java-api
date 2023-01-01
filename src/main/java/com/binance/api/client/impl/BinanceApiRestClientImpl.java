@@ -268,9 +268,26 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation) {
     return executeSync(binanceApiService.getUserAssets(asset, needBtcValuation,
-        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        System.currentTimeMillis())
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
     );
+  }
+
+  @Override
+  public AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                                     Integer limit) {
+    return executeSync(binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+    );
+  }
+
+  @Override
+  public AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime) {
+    return getAssetDividendHistory(asset, startTime, endTime, null);
+  }
+
+  @Override
+  public AssetDividendHistory getRecentAssetDividendHistory(String asset) {
+    return getAssetDividendHistory(asset, null, null, null);
   }
 
   // User stream endpoints

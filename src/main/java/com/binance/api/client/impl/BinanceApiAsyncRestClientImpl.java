@@ -192,14 +192,33 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   @Override
   public void getUserAssets(String asset, boolean needBtcValuation,
                             BinanceApiCallback<List<ExtendedAssetBalance>> callback) {
-    long timestamp = System.currentTimeMillis();
     Call<List<ExtendedAssetBalance>> call = binanceApiService.getUserAssets(
         asset,
         needBtcValuation,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        timestamp
+        System.currentTimeMillis()
     );
     call.enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getAssetDividendHistory(String asset, Long startTime, Long endTime, Integer limit,
+                                      BinanceApiCallback<AssetDividendHistory> callback) {
+    binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                      BinanceApiCallback<AssetDividendHistory> callback) {
+    getAssetDividendHistory(asset, startTime, endTime, null, callback);
+  }
+
+  @Override
+  public void getRecentAssetDividendHistory(String asset,
+                                            BinanceApiCallback<AssetDividendHistory> callback) {
+    getAssetDividendHistory(asset, null, null, null, callback);
   }
 
   @Override
