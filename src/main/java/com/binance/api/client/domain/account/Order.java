@@ -71,11 +71,6 @@ public class Order {
   private String stopPrice;
 
   /**
-   * Used with stop orders.
-   */
-  private String stopLimitPrice;
-
-  /**
    * Used with iceberg orders.
    */
   private String icebergQty;
@@ -93,7 +88,7 @@ public class Order {
   /**
    * Update timestamp.
    */
-  private long updateTime;
+  private Long updateTime;
 
   /**
    * Is working.
@@ -101,10 +96,14 @@ public class Order {
   @JsonProperty("isWorking")
   private boolean working;
 
+  private Long workingTime;
+
   /**
    * Original quote order quantity.
    */
   private String origQuoteOrderQty;
+
+  private String selfTradePreventionMode;
 
   public String getSymbol() {
     return symbol;
@@ -194,14 +193,6 @@ public class Order {
     this.stopPrice = stopPrice;
   }
 
-  public String getStopLimitPrice() {
-    return stopLimitPrice;
-  }
-
-  public void setStopLimitPrice(String stopLimitPrice) {
-    this.stopLimitPrice = stopLimitPrice;
-  }
-
   public String getIcebergQty() {
     return icebergQty;
   }
@@ -230,7 +221,7 @@ public class Order {
     return updateTime;
   }
 
-  public void setUpdateTime(long updateTime) {
+  public void setUpdateTime(Long updateTime) {
     this.updateTime = updateTime;
   }
 
@@ -250,6 +241,22 @@ public class Order {
     this.origQuoteOrderQty = origQuoteOrderQty;
   }
 
+  public Long getWorkingTime() {
+    return workingTime;
+  }
+
+  public void setWorkingTime(Long workingTime) {
+    this.workingTime = workingTime;
+  }
+
+  public String getSelfTradePreventionMode() {
+    return selfTradePreventionMode;
+  }
+
+  public void setSelfTradePreventionMode(String selfTradePreventionMode) {
+    this.selfTradePreventionMode = selfTradePreventionMode;
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
@@ -264,7 +271,6 @@ public class Order {
         .append("type", type)
         .append("side", side)
         .append("stopPrice", stopPrice)
-        .append("stopLimitPrice", stopLimitPrice)
         .append("icebergQty", icebergQty)
         .append("time", time)
         .append("cummulativeQuoteQty", cummulativeQuoteQty)
