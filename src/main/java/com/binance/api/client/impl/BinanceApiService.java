@@ -5,9 +5,15 @@ import com.binance.api.client.domain.OrderSide;
 import com.binance.api.client.domain.OrderType;
 import com.binance.api.client.domain.TimeInForce;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -230,6 +236,25 @@ public interface BinanceApiService {
   Call<DepositAddress> getDepositAddress(@Query("coin") String asset, @Query("network")
   String network, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
+  /**
+   * Get Dust transfer log.
+   * See https://binance-docs.github.io/apidocs/spot/en/#dustlog-user_data
+   *
+   * @param startTime  When specified, return only records with time >= startTime
+   * @param endTime    When specified, return only records with time <= endTime
+   * @param recvWindow Receive window, in milliseconds
+   * @param timestamp  The current system timestamp
+   * @return Log of dust transfers
+   */
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/asset/dribblet")
+  Call<DustTransferLog> getDustLog(
+      @Query("startTime") Long startTime,
+      @Query("endTime") Long endTime,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
   @POST("/sapi/v1/asset/dust")
   Call<DustTransferResponse> dustTransfer(@Query("asset") List<String> asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
@@ -239,6 +264,17 @@ public interface BinanceApiService {
   Call<List<ExtendedAssetBalance>> getUserAssets(
       @Query("asset") String asset,
       @Query("needBtcValuation") boolean needBtcValuation,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/asset/assetDividend")
+  Call<AssetDividendHistory> getAssetDividendRecord(
+      @Query("asset") String asset,
+      @Query("startTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("limit") Integer limit, // Default 20, max 500
       @Query("recvWindow") Long recvWindow,
       @Query("timestamp") Long timestamp
   );
@@ -265,4 +301,66 @@ public interface BinanceApiService {
   @PUT("/sapi/v1/userDataStream")
   Call<Void> keepAliveMarginUserDataStream(@Query("listenKey") String listenKey);
 
+  // Fiat endpoints
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/fiat/orders")
+  Call<FiatTransactionHistory> getFiatDepositOrWithdrawalHistory(
+      @Query("transactionType") String transactionType, // 0: deposit; 1: withdrawal
+      @Query("beginTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("page") Integer page, // default 1
+      @Query("rows") Integer rows, // default 100, max 500
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/fiat/payments")
+  Call<FiatPaymentHistory> getFiatPaymentHistory(
+      @Query("transactionType") String transactionType, // 0: buy; 1: sell
+      @Query("beginTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("page") Integer page, // default 1
+      @Query("rows") Integer rows, // default 100, max 500
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
+  // Savings endpoints
+
+  /**
+   * Get savings interest history for the user's account.
+   *
+   * @param lendingType "DAILY" for flexible, "ACTIVITY" for activity, "CUSTOMIZED_FIXED" for fixed
+   * @param asset       The asset which was put in the savings account (BTC, etc.)
+   * @param beginTime   Minimum timestamp for filtering the results
+   * @param endTime     Maximum timestamp for filtering the results The time between startTime
+   *                    and endTime cannot be longer than 30 days.
+   *                    If startTime and endTime are both not sent, then the last 30 days'
+   *                    data will be returned.
+   * @param page        Current querying page. Start from 1. Default: 1
+   * @param size        Items per "page", Default:10, Max:100
+   * @param recvWindow
+   * @param timestamp
+   * @return List of SavingsInterest objects
+   */
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/lending/union/interestHistory")
+  Call<List<SavingsInterest>> getSavingsInterestHistory(
+      @Query("lendingType") String lendingType,
+      @Query("asset") String asset,
+      @Query("startTime") Long beginTime,
+      @Query("endTime") Long endTime,
+      @Query("current") Long page,
+      @Query("size") Long size,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
+
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/lending/union/account")
+  Call<LendingAccountSummary> getLendingAccount(
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 }

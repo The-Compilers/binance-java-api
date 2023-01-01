@@ -1,8 +1,7 @@
 package com.binance.api.examples;
 
-import com.binance.api.client.BinanceApiClientFactory;
-import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.domain.TimeInForce;
+import com.binance.api.client.domain.account.NewOrder;
 import com.binance.api.client.domain.account.NewOrderResponse;
 import com.binance.api.client.domain.account.NewOrderResponseType;
 import com.binance.api.client.domain.account.Order;
@@ -21,41 +20,74 @@ import static com.binance.api.client.domain.account.NewOrder.marketBuy;
 /**
  * Examples on how to place orders, cancel them, and query account information.
  */
-public class OrdersExample {
+public class OrdersExample extends AuthenticatedExampleBase {
 
   public static void main(String[] args) {
-    BinanceApiClientFactory factory = BinanceApiClientFactory.newInstance("YOUR_API_KEY", "YOUR_SECRET");
-    BinanceApiRestClient client = factory.newRestClient();
+    OrdersExample example = new OrdersExample();
+    example.run();
+  }
 
-    // Getting list of open orders
-    List<Order> openOrders = client.getOpenOrders(new OrderRequest("LINKETH"));
+  private void run() {
+    getOpenOrders();
+    getAllOrders(10);
+    getOrderStatus(751698L);
+    cancelOrder(756762L);
+    placeTestLimitOrder();
+    placeTestMarketOrder();
+    placeRealLimitOrder();
+  }
+
+  private void getOpenOrders() {
+    List<Order> openOrders = client.getOpenOrders(new OrderRequest("BTCUSDT"));
+    System.out.println("================ Open orders ================");
     System.out.println(openOrders);
+    System.out.println();
+  }
 
-    // Getting list of all orders with a limit of 10
-    List<Order> allOrders = client.getAllOrders(new AllOrdersRequest("LINKETH").limit(10));
+  private void getAllOrders(int limit) {
+    System.out.println("================ All recent orders ================");
+    List<Order> allOrders = client.getAllOrders(new AllOrdersRequest("BTCUSDT").limit(limit));
     System.out.println(allOrders);
+    System.out.println();
+  }
 
-    // Get status of a particular order
-    Order order = client.getOrderStatus(new OrderStatusRequest("LINKETH", 751698L));
-    System.out.println(order);
-
-    // Canceling an order
+  private void getOrderStatus(long orderId) {
+    System.out.println("================ Status for order " + orderId + "================");
     try {
-      CancelOrderResponse cancelOrderResponse = client.cancelOrder(new CancelOrderRequest("LINKETH", 756762l));
-      System.out.println(cancelOrderResponse);
+      Order order = client.getOrderStatus(new OrderStatusRequest("BTCUSDT", orderId));
+      System.out.println(order);
+    } catch (BinanceApiException e) {
+      System.out.println("Error: " + e.getError().getMsg());
+    }
+    System.out.println();
+  }
+
+  private void cancelOrder(long orderId) {
+    try {
+      System.out.println("================ Try to cancel order " + orderId + "================");
+      CancelOrderResponse response = client.cancelOrder(new CancelOrderRequest("LINKETH", orderId));
+      System.out.println(response);
+      System.out.println();
     } catch (BinanceApiException e) {
       System.out.println(e.getError().getMsg());
     }
-
-    // Placing a test LIMIT order
-    client.newOrderTest(limitBuy("LINKETH", TimeInForce.GTC, "1000", "0.0001"));
-
-    // Placing a test MARKET order
-    client.newOrderTest(marketBuy("LINKETH", "1000"));
-
-    // Placing a real LIMIT order
-    NewOrderResponse newOrderResponse = client.newOrder(limitBuy("LINKETH", TimeInForce.GTC, "1000", "0.0001").newOrderRespType(NewOrderResponseType.FULL));
-    System.out.println(newOrderResponse);
   }
 
+  private void placeTestLimitOrder() {
+    System.out.println("================ Test new limit-order ================");
+    client.newOrderTest(limitBuy("LINKETH", TimeInForce.GTC, "1000", "0.0001"));
+  }
+
+  private void placeTestMarketOrder() {
+    System.out.println("================ Test new market-order ================");
+    client.newOrderTest(marketBuy("LINKETH", "1000"));
+  }
+
+  private void placeRealLimitOrder() {
+    System.out.println("================ Place new REAL order ================");
+    NewOrder order = limitBuy("LINKETH", TimeInForce.GTC, "1000", "0.0001")
+        .newOrderRespType(NewOrderResponseType.FULL);
+    NewOrderResponse newOrderResponse = client.newOrder(order);
+    System.out.println(newOrderResponse);
+  }
 }

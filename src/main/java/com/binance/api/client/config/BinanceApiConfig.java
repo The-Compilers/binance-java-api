@@ -28,6 +28,11 @@ public class BinanceApiConfig {
   public static boolean useTestnetStreaming;
 
   /**
+   * When true, log all HTTP requests and responses (for debugging)
+   */
+  public static boolean useHttpLogging = false;
+
+  /**
    * Set the URL base domain name (e.g., binance.com).
    *
    * @param baseDomain Base domain name

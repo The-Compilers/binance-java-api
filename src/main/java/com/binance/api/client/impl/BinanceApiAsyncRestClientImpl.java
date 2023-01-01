@@ -4,23 +4,21 @@ import com.binance.api.client.BinanceApiAsyncRestClient;
 import com.binance.api.client.BinanceApiCallback;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
-import com.binance.api.client.domain.account.Account;
-import com.binance.api.client.domain.account.Deposit;
-import com.binance.api.client.domain.account.DepositAddress;
-import com.binance.api.client.domain.account.ExtendedAssetBalance;
-import com.binance.api.client.domain.account.NewOrder;
-import com.binance.api.client.domain.account.NewOrderResponse;
-import com.binance.api.client.domain.account.Order;
-import com.binance.api.client.domain.account.Trade;
-import com.binance.api.client.domain.account.TradeHistoryItem;
-import com.binance.api.client.domain.account.Withdraw;
-import com.binance.api.client.domain.account.WithdrawResult;
+import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
 import com.binance.api.client.domain.account.request.AllOrdersRequest;
 import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
+import com.binance.api.client.domain.fiat.FiatTransactionType;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -196,16 +194,48 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
+  public void getDustTransferHistory(Long startTime, Long endTime,
+                                     BinanceApiCallback<DustTransferLog> callback) {
+    binanceApiService.getDustLog(startTime, endTime,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getRecentDustTransferHistory(BinanceApiCallback<DustTransferLog> callback) {
+    getDustTransferHistory(null, null, callback);
+  }
+
+  @Override
   public void getUserAssets(String asset, boolean needBtcValuation,
                             BinanceApiCallback<List<ExtendedAssetBalance>> callback) {
-    long timestamp = System.currentTimeMillis();
     Call<List<ExtendedAssetBalance>> call = binanceApiService.getUserAssets(
         asset,
         needBtcValuation,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        timestamp
+        System.currentTimeMillis()
     );
     call.enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getAssetDividendHistory(String asset, Long startTime, Long endTime, Integer limit,
+                                      BinanceApiCallback<AssetDividendHistory> callback) {
+    binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                      BinanceApiCallback<AssetDividendHistory> callback) {
+    getAssetDividendHistory(asset, startTime, endTime, null, callback);
+  }
+
+  @Override
+  public void getRecentAssetDividendHistory(String asset,
+                                            BinanceApiCallback<AssetDividendHistory> callback) {
+    getAssetDividendHistory(asset, null, null, null, callback);
   }
 
   @Override
@@ -284,5 +314,99 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   @Override
   public void closeUserDataStream(String listenKey, BinanceApiCallback<Void> callback) {
     binanceApiService.closeAliveUserDataStream(listenKey).enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  // Fiat endpoints
+  @Override
+  public void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer perPage,
+                                    BinanceApiCallback<FiatTransactionHistory> callback) {
+    binanceApiService.getFiatDepositOrWithdrawalHistory(
+            FiatTransactionType.DEPOSIT.toString(),
+            startTime, endTime, page, perPage,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getFiatDepositHistory(Long startTime, Long endTime, BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatDepositHistory(startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentFiatDepositHistory(BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatDepositHistory(null, null, null, null, callback);
+  }
+
+  @Override
+  public void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer perPage, BinanceApiCallback<FiatTransactionHistory> callback) {
+    binanceApiService.getFiatDepositOrWithdrawalHistory(
+            FiatTransactionType.WITHDRAW.toString(),
+            startTime, endTime, page, perPage,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getFiatWithdrawHistory(Long startTime, Long endTime, BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatWithdrawHistory(startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentFiatWithdrawHistory(BinanceApiCallback<FiatTransactionHistory> callback) {
+    getFiatWithdrawHistory(null, null, null, null, callback);
+  }
+
+  @Override
+  public void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                    Integer page, Integer perPage,
+                                    BinanceApiCallback<FiatPaymentHistory> callback) {
+    binanceApiService.getFiatPaymentHistory(type.toString(), startTime, endTime, page, perPage,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                    BinanceApiCallback<FiatPaymentHistory> callback) {
+    getFiatPaymentHistory(type, startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentFiatPaymentHistory(FiatPaymentType type,
+                                          BinanceApiCallback<FiatPaymentHistory> callback) {
+    getFiatPaymentHistory(type, null, null, null, null, callback);
+  }
+
+  // Savings endpoints
+
+  @Override
+  public void getSavingsInterestHistory(LendingType type, String asset,
+                                        Long startTime, Long endTime,
+                                        Long page, Long perPage,
+                                        BinanceApiCallback<List<SavingsInterest>> callback) {
+    binanceApiService.getSavingsInterestHistory(
+            type.toString(), asset, startTime, endTime, page, perPage,
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
+  }
+
+  @Override
+  public void getSavingsInterestHistory(LendingType type, String asset,
+                                        Long startTime, Long endTime,
+                                        BinanceApiCallback<List<SavingsInterest>> callback) {
+    getSavingsInterestHistory(type, asset, startTime, endTime, null, null, callback);
+  }
+
+  @Override
+  public void getRecentSavingsInterestHistory(LendingType type, String asset,
+                                              BinanceApiCallback<List<SavingsInterest>> callback) {
+    getSavingsInterestHistory(type, asset, null, null, null, null, callback);
+  }
+
+  @Override
+  public void getLendingAccountSummary(BinanceApiCallback<LendingAccountSummary> callback) {
+    binanceApiService.getLendingAccount(
+            BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+        .enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 }

@@ -7,6 +7,7 @@ import com.binance.api.client.security.AuthenticationInterceptor;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import okhttp3.logging.HttpLoggingInterceptor;
 import org.apache.commons.lang3.StringUtils;
 import retrofit2.Call;
 import retrofit2.Converter;
@@ -30,10 +31,19 @@ public class BinanceApiServiceGenerator {
     Dispatcher dispatcher = new Dispatcher();
     dispatcher.setMaxRequestsPerHost(500);
     dispatcher.setMaxRequests(500);
-    sharedClient = new OkHttpClient.Builder()
+    OkHttpClient.Builder builder = new OkHttpClient.Builder()
         .dispatcher(dispatcher)
-        .pingInterval(20, TimeUnit.SECONDS)
-        .build();
+        .pingInterval(20, TimeUnit.SECONDS);
+    if (BinanceApiConfig.useHttpLogging) {
+      builder.addInterceptor(createLoggingInterceptor());
+    }
+    sharedClient = builder.build();
+  }
+
+  private static HttpLoggingInterceptor createLoggingInterceptor() {
+    HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+    loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+    return loggingInterceptor;
   }
 
   @SuppressWarnings("unchecked")
@@ -54,30 +64,35 @@ public class BinanceApiServiceGenerator {
    * @return a new implementation of the API endpoints for the Binance API service.
    */
   public static <S> S createService(Class<S> serviceClass, String apiKey, String secret) {
-    String baseUrl = null;
-    if (!BinanceApiConfig.useTestnet) {
-      baseUrl = BinanceApiConfig.getApiBaseUrl();
-    } else {
-      baseUrl = /*BinanceApiConfig.useTestnetStreaming ?
-                BinanceApiConfig.getStreamTestNetBaseUrl() :*/
-          BinanceApiConfig.getTestNetBaseUrl();
-    }
-
     Retrofit.Builder retrofitBuilder = new Retrofit.Builder()
-        .baseUrl(baseUrl)
+        .baseUrl(getBaseUrl())
         .addConverterFactory(converterFactory);
 
-    if (StringUtils.isEmpty(apiKey) || StringUtils.isEmpty(secret)) {
-      retrofitBuilder.client(sharedClient);
-    } else {
-      // `adaptedClient` will use its own interceptor, but share thread pool etc with the 'parent' client
-      AuthenticationInterceptor interceptor = new AuthenticationInterceptor(apiKey, secret);
-      OkHttpClient adaptedClient = sharedClient.newBuilder().addInterceptor(interceptor).build();
-      retrofitBuilder.client(adaptedClient);
-    }
+    retrofitBuilder.client(createClient(apiKey, secret));
 
     Retrofit retrofit = retrofitBuilder.build();
     return retrofit.create(serviceClass);
+  }
+
+  private static OkHttpClient createClient(String apiKey, String secret) {
+    OkHttpClient client;
+    if (noAuthenticationNeeded(apiKey, secret)) {
+      client = sharedClient;
+    } else {
+      AuthenticationInterceptor authInterceptor = new AuthenticationInterceptor(apiKey, secret);
+      client = sharedClient.newBuilder().addInterceptor(authInterceptor).build();
+    }
+    return client;
+  }
+
+  private static boolean noAuthenticationNeeded(String apiKey, String secret) {
+    return StringUtils.isEmpty(apiKey) && StringUtils.isEmpty(secret);
+  }
+
+  private static String getBaseUrl() {
+    return !BinanceApiConfig.useTestnet
+        ? BinanceApiConfig.getApiBaseUrl()
+        : BinanceApiConfig.getTestNetBaseUrl();
   }
 
   /**

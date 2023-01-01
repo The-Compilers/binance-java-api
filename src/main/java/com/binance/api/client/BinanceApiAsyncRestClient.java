@@ -1,22 +1,19 @@
 package com.binance.api.client;
 
-import com.binance.api.client.domain.account.Account;
-import com.binance.api.client.domain.account.Deposit;
-import com.binance.api.client.domain.account.DepositAddress;
-import com.binance.api.client.domain.account.ExtendedAssetBalance;
-import com.binance.api.client.domain.account.NewOrder;
-import com.binance.api.client.domain.account.NewOrderResponse;
-import com.binance.api.client.domain.account.Order;
-import com.binance.api.client.domain.account.Trade;
-import com.binance.api.client.domain.account.TradeHistoryItem;
-import com.binance.api.client.domain.account.Withdraw;
-import com.binance.api.client.domain.account.WithdrawResult;
+import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
 import com.binance.api.client.domain.account.request.AllOrdersRequest;
 import com.binance.api.client.domain.account.request.CancelOrderRequest;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
 import com.binance.api.client.domain.event.ListenKey;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.ServerTime;
@@ -224,8 +221,28 @@ public interface BinanceApiAsyncRestClient {
 
   /**
    * Get current account information using default parameters (async).
+   *
+   * @param callback the callback that handles the response
    */
   void getAccount(BinanceApiCallback<Account> callback);
+
+  /**
+   * Get history of dust transfer transactions, max 100 records per request.
+   * Warning: The API Only return records after 2020/12/01 !!! You need to manually fetch
+   * earlier records, using the "Transaction history CSV" on the Binance webpage!
+   *
+   * @param startTime When specified, return only transactions with time >= startTime
+   * @param endTime   When specified, return only transactions with time <= endTime
+   * @param callback  the callback that handles the response
+   */
+  void getDustTransferHistory(Long startTime, Long endTime,
+                              BinanceApiCallback<DustTransferLog> callback);
+
+  /**
+   * Get recent history of dust transfer transactions, max 100 records.
+   * @param callback  the callback that handles the response
+   */
+  void getRecentDustTransferHistory(BinanceApiCallback<DustTransferLog> callback);
 
   /**
    * Get User account information.
@@ -233,11 +250,42 @@ public interface BinanceApiAsyncRestClient {
    * @param asset            When specified, include only the given asset. When null, get
    *                         balances for all assets
    * @param needBtcValuation When true, include value in BTC for each asset.
-   * @return A list of all user assets with non-zero balances (or only the one asset,
-   * when specified)
+   * @param callback         the callback that handles the response
    */
   void getUserAssets(String asset, boolean needBtcValuation,
                      BinanceApiCallback<List<ExtendedAssetBalance>> callback);
+
+  /**
+   * Get asset dividend record (history).
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param limit     Maximum records to return. Default 20 (when null), max 500.
+   * @param callback  the callback that handles the response
+   */
+  void getAssetDividendHistory(String asset, Long startTime, Long endTime, Integer limit,
+                               BinanceApiCallback<AssetDividendHistory> callback);
+
+  /**
+   * Get asset dividend record (history), with the default limit value.
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  the callback that handles the response
+   */
+  void getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                               BinanceApiCallback<AssetDividendHistory> callback);
+
+  /**
+   * Get recent asset dividend record (history).
+   *
+   * @param asset    The asset to query
+   * @param callback the callback that handles the response
+   */
+  void getRecentAssetDividendHistory(String asset,
+                                     BinanceApiCallback<AssetDividendHistory> callback);
 
   /**
    * Get trades for a specific account and symbol.
@@ -384,4 +432,146 @@ public interface BinanceApiAsyncRestClient {
    * @param callback  the callback that handles the response which contains a listenKey
    */
   void closeUserDataStream(String listenKey, BinanceApiCallback<Void> callback);
+
+  // Fiat endpoints
+
+  /**
+   * Get FIAT currency deposit history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of records per page
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatDepositHistory(Long startTime, Long endTime, Integer page, Integer perPage,
+                             BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency deposit history, with default paging.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatDepositHistory(Long startTime, Long endTime,
+                             BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get recent FIAT currency deposit history.
+   *
+   * @param callback Callback which will handle the result
+   */
+  void getRecentFiatDepositHistory(BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency withdrawal history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of rows (records) per page
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatWithdrawHistory(Long startTime, Long endTime, Integer page, Integer perPage,
+                              BinanceApiCallback<FiatTransactionHistory> callback);
+
+
+  /**
+   * Get FIAT currency withdrawal history, with default paging.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatWithdrawHistory(Long startTime, Long endTime,
+                              BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get recent FIAT currency withdrawal history.
+   *
+   * @param callback Callback which will handle the result
+   */
+  void getRecentFiatWithdrawHistory(BinanceApiCallback<FiatTransactionHistory> callback);
+
+  /**
+   * Get FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of rows (records) per page
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                             Integer page, Integer perPage,
+                             BinanceApiCallback<FiatPaymentHistory> callback);
+
+  /**
+   * Get FIAT currency payment history, with default paging parameters.
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                             BinanceApiCallback<FiatPaymentHistory> callback);
+
+  /**
+   * Get recent FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type     Filter by payment type: buy or sell
+   * @param callback Callback which will handle the result
+   */
+  void getRecentFiatPaymentHistory(FiatPaymentType type,
+                                   BinanceApiCallback<FiatPaymentHistory> callback);
+
+  // Savings endpoints
+
+  /**
+   * Get savings interest history for the user's account.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of records per page
+   * @param callback  Callback which will handle the result
+   */
+  void getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                 Long endTime, Long page, Long perPage,
+                                 BinanceApiCallback<List<SavingsInterest>> callback);
+
+  /**
+   * Get savings interest history for the user's account, default paging settings.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param callback  Callback which will handle the result
+   */
+  void getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                 Long endTime,
+                                 BinanceApiCallback<List<SavingsInterest>> callback);
+
+  /**
+   * Get recent savings interest history for the user's account.
+   *
+   * @param type     The type of lending
+   * @param asset    The asset in question
+   * @param callback Callback which will handle the result
+   */
+  void getRecentSavingsInterestHistory(LendingType type, String asset,
+                                       BinanceApiCallback<List<SavingsInterest>> callback);
+
+  /**
+   * Get the summary of all lending accounts.
+   *
+   * @param callback Callback which will handle the result
+   */
+  void getLendingAccountSummary(BinanceApiCallback<LendingAccountSummary> callback);
 }

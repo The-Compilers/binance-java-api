@@ -1,4 +1,4 @@
-package com.binance.api.client.domain.account;
+package com.binance.api.client.domain.account.dust;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 

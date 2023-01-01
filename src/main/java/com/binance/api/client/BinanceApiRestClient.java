@@ -1,7 +1,15 @@
 package com.binance.api.client;
 
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.market.AggTrade;
@@ -263,7 +271,24 @@ public interface BinanceApiRestClient {
                           String name, String addressTag, Boolean transactionFeeFlag);
 
   /**
-   * Conver a list of assets to BNB
+   * Get history of dust transfer transactions, max 100 records per request.
+   * Warning: The API Only return records after 2020/12/01 !!! You need to manually fetch
+   * earlier records, using the "Transaction history CSV" on the Binance webpage!
+   *
+   * @param startTime When specified, return only transactions with time >= startTime
+   * @param endTime   When specified, return only transactions with time <= endTime
+   * @return Dust transfer history
+   */
+  DustTransferLog getDustTransferHistory(Long startTime, Long endTime);
+
+  /**
+   * Get recent history of dust transfer transactions, max 100 records per request.
+   * @return Dust transfer history
+   */
+  DustTransferLog getRecentDustTransferHistory();
+
+  /**
+   * Convert a list of assets to BNB
    *
    * @param asset the list of assets to convert
    */
@@ -333,7 +358,7 @@ public interface BinanceApiRestClient {
   /**
    * Fetch deposit address.
    *
-   * @param coin   The coin to get the address for
+   * @param coin    The coin to get the address for
    * @param network The network to use for deposit
    * @return deposit address for a given asset.
    */
@@ -349,6 +374,37 @@ public interface BinanceApiRestClient {
    * when specified)
    */
   List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation);
+
+  /**
+   * Get asset dividend record (history).
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param limit     Maximum records to return. Default 20 (when null), max 500.
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                               Integer limit);
+
+  /**
+   * Get asset dividend record (history), with the default limit value.
+   *
+   * @param asset     The asset to query
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime);
+
+  /**
+   * Get recent asset dividend record (history).
+   *
+   * @param asset The asset to query
+   * @return List of asset dividend records
+   */
+  AssetDividendHistory getRecentAssetDividendHistory(String asset);
+
 
   // User stream endpoints
 
@@ -372,4 +428,138 @@ public interface BinanceApiRestClient {
    * @param listenKey listen key that identifies a data stream
    */
   void closeUserDataStream(String listenKey);
+
+  // Fiat endpoints
+
+  /**
+   * Get FIAT currency deposit history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of rows (records) per page
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
+                                               Integer page, Integer perPage);
+
+  /**
+   * Get FIAT currency deposit history, with default paging parameters.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime);
+
+  /**
+   * Get recent FIAT currency deposit history.
+   *
+   * @return Deposit history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getRecentFiatDepositHistory();
+
+  /**
+   * Get FIAT currency withdrawal history.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of rows (records) per page
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime,
+                                                Integer page, Integer perPage);
+
+  /**
+   * Get FIAT currency withdrawal history, with default paging parameters.
+   *
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime);
+
+
+  /**
+   * Get recent FIAT currency withdrawal history.
+   *
+   * @return Withdrawal history, with a list of FiatTransaction objects inside
+   */
+  FiatTransactionHistory getRecentFiatWithdrawHistory();
+
+  /**
+   * Get FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of rows (records) per page
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                           Integer page, Integer perPage);
+
+  /**
+   * Get FIAT currency payment history, with default paging parameters.
+   *
+   * @param type      Filter by payment type: buy or sell
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime);
+
+  /**
+   * Get recent FIAT currency payment history (Credit card purchases, bank transfers).
+   *
+   * @param type Filter by payment type: buy or sell
+   * @return Payment history, with a list of FiatPayment objects inside
+   */
+  FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type);
+
+  // Savings endpoints
+
+  /**
+   * Get savings interest history for the user's account.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @param page      The page number, if there are multiple pages
+   * @param perPage   Number of records per page
+   * @return
+   */
+  List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                                  Long endTime, Long page, Long perPage);
+
+  /**
+   * Get savings interest history for the user's account, default paging settings.
+   *
+   * @param type      The type of lending
+   * @param asset     The asset in question
+   * @param startTime Return only transactions where time >= startTime
+   * @param endTime   Return only transactions where time <= endTime
+   * @return
+   */
+  List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset, Long startTime,
+                                                  Long endTime);
+
+  /**
+   * Get recent savings interest history for the user's account.
+   *
+   * @param type  The type of lending
+   * @param asset The asset in question
+   * @return
+   */
+  List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset);
+
+  /**
+   * Get the summary of all lending accounts.
+   *
+   * @return Lending account summary
+   */
+  LendingAccountSummary getLendingAccountSummary();
 }

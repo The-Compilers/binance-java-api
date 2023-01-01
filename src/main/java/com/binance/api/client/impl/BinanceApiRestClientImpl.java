@@ -4,7 +4,16 @@ import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.*;
+import com.binance.api.client.domain.account.savings.LendingAccountSummary;
+import com.binance.api.client.domain.account.savings.LendingType;
+import com.binance.api.client.domain.account.savings.SavingsInterest;
+import com.binance.api.client.domain.fiat.FiatPaymentHistory;
+import com.binance.api.client.domain.fiat.FiatPaymentType;
+import com.binance.api.client.domain.fiat.FiatTransactionHistory;
+import com.binance.api.client.domain.fiat.FiatTransactionType;
 import com.binance.api.client.domain.general.Asset;
 import com.binance.api.client.domain.general.ExchangeInfo;
 import com.binance.api.client.domain.market.*;
@@ -224,6 +233,17 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
+  public DustTransferLog getDustTransferHistory(Long startTime, Long endTime) {
+    return executeSync(binanceApiService.getDustLog(startTime, endTime,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public DustTransferLog getRecentDustTransferHistory() {
+    return getDustTransferHistory(null, null);
+  }
+
+  @Override
   public DustTransferResponse dustTransfer(List<String> asset) {
     return executeSync(binanceApiService.dustTransfer(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
@@ -264,9 +284,26 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public List<ExtendedAssetBalance> getUserAssets(String asset, boolean needBtcValuation) {
     return executeSync(binanceApiService.getUserAssets(asset, needBtcValuation,
-        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW,
-        System.currentTimeMillis())
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
     );
+  }
+
+  @Override
+  public AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
+                                                      Integer limit) {
+    return executeSync(binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
+    );
+  }
+
+  @Override
+  public AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime) {
+    return getAssetDividendHistory(asset, startTime, endTime, null);
+  }
+
+  @Override
+  public AssetDividendHistory getRecentAssetDividendHistory(String asset) {
+    return getAssetDividendHistory(asset, null, null, null);
   }
 
   // User stream endpoints
@@ -284,5 +321,87 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public void closeUserDataStream(String listenKey) {
     executeSync(binanceApiService.closeAliveUserDataStream(listenKey));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime,
+                                                      Integer page, Integer perPage) {
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
+        FiatTransactionType.DEPOSIT.toString(), startTime, endTime, page, perPage,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatDepositHistory(Long startTime, Long endTime) {
+    return getFiatDepositHistory(startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getRecentFiatDepositHistory() {
+    return getFiatDepositHistory(null, null, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime,
+                                                       Integer page, Integer perPage) {
+    return executeSync(binanceApiService.getFiatDepositOrWithdrawalHistory(
+        FiatTransactionType.WITHDRAW.toString(), startTime, endTime, page, perPage,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatTransactionHistory getFiatWithdrawHistory(Long startTime, Long endTime) {
+    return getFiatWithdrawHistory(startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatTransactionHistory getRecentFiatWithdrawHistory() {
+    return getFiatWithdrawHistory(null, null, null, null);
+  }
+
+  @Override
+  public FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime,
+                                                  Integer page, Integer perPage) {
+    return executeSync(binanceApiService.getFiatPaymentHistory(type.toString(),
+        startTime, endTime, page, perPage,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public FiatPaymentHistory getFiatPaymentHistory(FiatPaymentType type, Long startTime, Long endTime) {
+    return getFiatPaymentHistory(type, startTime, endTime, null, null);
+  }
+
+  @Override
+  public FiatPaymentHistory getRecentFiatPaymentHistory(FiatPaymentType type) {
+    return getFiatPaymentHistory(type, null, null, null, null);
+  }
+
+  // Savings endpoints
+
+  @Override
+  public List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset,
+                                                         Long startTime, Long endTime,
+                                                         Long page, Long perPage) {
+    return executeSync(binanceApiService.getSavingsInterestHistory(type.toString(), asset,
+        startTime, endTime, page, perPage,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
+  public List<SavingsInterest> getSavingsInterestHistory(LendingType type, String asset,
+                                                         Long startTime, Long endTime) {
+    return getSavingsInterestHistory(type, asset, startTime, endTime, null, null);
+  }
+
+  @Override
+  public List<SavingsInterest> getRecentSavingsInterestHistory(LendingType type, String asset) {
+    return getSavingsInterestHistory(type, asset, null, null, null, null);
+  }
+
+  @Override
+  public LendingAccountSummary getLendingAccountSummary() {
+    return executeSync(binanceApiService.getLendingAccount(
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
 }
