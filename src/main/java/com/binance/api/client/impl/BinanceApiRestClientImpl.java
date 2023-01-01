@@ -4,6 +4,8 @@ import com.binance.api.client.BinanceApiRestClient;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.constant.BinanceApiConstants;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.*;
 import com.binance.api.client.domain.account.savings.LendingAccountSummary;
 import com.binance.api.client.domain.account.savings.LendingType;
@@ -231,6 +233,12 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
+  public DustTransferLog getDustTransferHistory(Long startTime, Long endTime) {
+    return executeSync(binanceApiService.dustLog(startTime, endTime,
+        BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
+  }
+
+  @Override
   public DustTransferResponse dustTransfer(List<String> asset) {
     return executeSync(binanceApiService.dustTransfer(asset, BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis()));
   }
@@ -277,7 +285,7 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public AssetDividendHistory getAssetDividendHistory(String asset, Long startTime, Long endTime,
-                                                     Integer limit) {
+                                                      Integer limit) {
     return executeSync(binanceApiService.getAssetDividendRecord(asset, startTime, endTime, limit,
         BinanceApiConstants.DEFAULT_RECEIVING_WINDOW, System.currentTimeMillis())
     );

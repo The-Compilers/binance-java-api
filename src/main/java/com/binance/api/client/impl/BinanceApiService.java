@@ -5,6 +5,8 @@ import com.binance.api.client.domain.OrderSide;
 import com.binance.api.client.domain.OrderType;
 import com.binance.api.client.domain.TimeInForce;
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.CancelOrderListResponse;
 import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.savings.LendingAccountSummary;
@@ -233,6 +235,25 @@ public interface BinanceApiService {
   @GET("/sapi/v1/capital/deposit/address")
   Call<DepositAddress> getDepositAddress(@Query("coin") String asset, @Query("network")
   String network, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+
+  /**
+   * Get Dust transfer log.
+   * See https://binance-docs.github.io/apidocs/spot/en/#dustlog-user_data
+   *
+   * @param startTime  When specified, return only records with time >= startTime
+   * @param endTime    When specified, return only records with time <= endTime
+   * @param recvWindow Receive window, in milliseconds
+   * @param timestamp  The current system timestamp
+   * @return Log of dust transfers
+   */
+  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @GET("/sapi/v1/asset/dribblet")
+  Call<DustTransferLog> getDustLog(
+      @Query("startTime") Long startTime,
+      @Query("endTime") Long endTime,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 
   @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
   @POST("/sapi/v1/asset/dust")

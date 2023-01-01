@@ -1,6 +1,8 @@
 package com.binance.api.client;
 
 import com.binance.api.client.domain.account.*;
+import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.client.domain.account.dust.DustTransferResponse;
 import com.binance.api.client.domain.account.request.*;
 import com.binance.api.client.domain.account.savings.LendingAccountSummary;
 import com.binance.api.client.domain.account.savings.LendingType;
@@ -269,7 +271,18 @@ public interface BinanceApiRestClient {
                           String name, String addressTag, Boolean transactionFeeFlag);
 
   /**
-   * Conver a list of assets to BNB
+   * Get history of dust transfer transactions, max 100 records per request.
+   * Warning: The API Only return records after 2020/12/01 !!! You need to manually fetch
+   * earlier records, using the "Transaction history CSV" on the Binance webpage!
+   *
+   * @param startTime When specified, return only transactions with time >= startTime
+   * @param endTime   When specified, return only transactions with time <= endTime
+   * @return Dust transfer history
+   */
+  DustTransferLog getDustTransferHistory(Long startTime, Long endTime);
+
+  /**
+   * Convert a list of assets to BNB
    *
    * @param asset the list of assets to convert
    */
