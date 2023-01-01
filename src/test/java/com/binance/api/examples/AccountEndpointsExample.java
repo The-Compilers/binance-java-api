@@ -25,13 +25,13 @@ public class AccountEndpointsExample extends AuthenticatedExampleBase {
     List<Trade> myTrades = client.getMyTrades("BTCUSDT");
     System.out.println("My trades in the BTC/USDT market: ");
     System.out.println(myTrades);
-    System.out.println("");
+    System.out.println();
   }
 
   private void printAccountBalances() {
     Account account = client.getAccount();
     System.out.println("Balance for ETH: " + account.getAssetBalance("ETH").getTotalAmount());
-    System.out.println("");
+    System.out.println();
 
     // This would print a lot of zeroes, unreadable:
     // System.out.println("Account balances: " + account.getBalances());
