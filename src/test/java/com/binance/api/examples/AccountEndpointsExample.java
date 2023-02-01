@@ -2,6 +2,7 @@ package com.binance.api.examples;
 
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.Trade;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public class AccountEndpointsExample extends AuthenticatedExampleBase {
 
   public static void main(String[] args) {
+    PropertyConfigurator.configure("log4j.properties");
     AccountEndpointsExample example = new AccountEndpointsExample();
     example.run();
   }
@@ -21,9 +23,14 @@ public class AccountEndpointsExample extends AuthenticatedExampleBase {
   }
 
   private void printMyTrades() {
-    // Get list of trades
-    List<Trade> myTrades = client.getMyTrades("BTCUSDT");
-    System.out.println("My trades in the BTC/USDT market: ");
+    printTradesInMarket("BTCUSDT");
+    printTradesInMarket("LTCUSDT");
+    printTradesInMarket("ETHUSDT");
+  }
+
+  private void printTradesInMarket(String symbol) {
+    List<Trade> myTrades = client.getMyTrades(symbol);
+    System.out.println("My trades in the " + symbol + " market: ");
     System.out.println(myTrades);
     System.out.println();
   }

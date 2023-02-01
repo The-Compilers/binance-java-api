@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.List;
+import static com.binance.api.client.limits.ApiWeightHeaders.*;
 
 /**
  * Binance's REST API URL mappings and endpoint security configuration.
@@ -139,11 +140,11 @@ public interface BinanceApiService {
   Call<List<OrderList>> getAllOrderList(@Query("fromId") Long fromId, @Query("startTime") Long startTime, @Query("endTime") Long endTime,
                                         @Query("limit") Integer limit, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/account")
   Call<Account> getAccount(@Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/myTrades")
   Call<List<Trade>> getMyTrades(@Query("symbol") String symbol, @Query("limit") Integer limit, @Query("fromId") Long fromId,
                                 @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
@@ -302,7 +303,7 @@ public interface BinanceApiService {
   Call<Void> keepAliveMarginUserDataStream(@Query("listenKey") String listenKey);
 
   // Fiat endpoints
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_UID + 90000})
   @GET("/sapi/v1/fiat/orders")
   Call<FiatTransactionHistory> getFiatDepositOrWithdrawalHistory(
       @Query("transactionType") String transactionType, // 0: deposit; 1: withdrawal
