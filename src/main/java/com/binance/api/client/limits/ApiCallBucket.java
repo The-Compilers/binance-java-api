@@ -103,4 +103,22 @@ public class ApiCallBucket {
   private boolean hasExpired(ApiCallEntry e, long timeNow) {
     return e.getTime() + duration < timeNow;
   }
+
+  /**
+   * Get the currently used total weight (sum of weights of all registered API calls).
+   *
+   * @return The sum of weights for all API calls
+   */
+  public int getUsedWeight() {
+    return usedWeight;
+  }
+
+  /**
+   * Get the maximum allowed API weight sum within this time window.
+   *
+   * @return The max allowed weight
+   */
+  public int getMaxWeight() {
+    return maxWeight;
+  }
 }

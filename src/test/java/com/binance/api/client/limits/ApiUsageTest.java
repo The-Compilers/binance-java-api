@@ -1,7 +1,7 @@
 package com.binance.api.client.limits;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
+import static com.binance.api.client.limits.LimitTestingUtils.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -15,10 +15,6 @@ public class ApiUsageTest {
   public void testEmpty() {
     ApiUsage usage = new ApiUsage();
     assertEquals(0, usage.getMinSleepDuration(getTime(), 10));
-  }
-
-  private static long getTime() {
-    return System.currentTimeMillis();
   }
 
   /**
@@ -62,13 +58,6 @@ public class ApiUsageTest {
     ApiUsage usage = createUsageWithCalls(20, 10,
         new long[]{t - 3000, t - 2000, t - 1000}, new int[]{4, 4, 4});
     assertEquals(7000, usage.getMinSleepDuration(t, 10));
-  }
-
-  @NotNull
-  private ApiUsage createUsageWithCalls(int maxWeight, int perSeconds,
-                                        long[] apiCallTimes, int[] apiCallWeights) {
-    return createMultiLimitUsageWithCalls(new int[]{perSeconds}, new int[]{maxWeight},
-        apiCallTimes, apiCallWeights);
   }
 
   /**
@@ -150,8 +139,6 @@ public class ApiUsageTest {
   }
 
 
-  //
-
   /**
    * Three limits: 10-second limit, 1-minute limit, 1-hour limit. The 10-sec limit is exceeded,
    * wait until the 2nd api call times out.
@@ -166,20 +153,6 @@ public class ApiUsageTest {
     assertEquals(8000, usage.getMinSleepDuration(t, 10));
   }
 
-  private ApiUsage createMultiLimitUsageWithCalls(int[] timeLimits, int[] limitWeights,
-                                                  long[] apiCallTimes, int[] apiCallWeights) {
-    assertEquals(timeLimits.length, limitWeights.length);
-    assertEquals(apiCallTimes.length, apiCallWeights.length);
-    ApiUsage usage = new ApiUsage();
-
-    for (int i = 0; i < timeLimits.length; ++i) {
-      usage.setLimit(limitWeights[i], timeLimits[i]);
-    }
-    for (int j = 0; j < apiCallWeights.length; ++j) {
-      usage.addCall(apiCallTimes[j], apiCallWeights[j]);
-    }
-    return usage;
-  }
 
 
   /**
