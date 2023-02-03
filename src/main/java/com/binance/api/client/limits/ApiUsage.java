@@ -29,12 +29,9 @@ public class ApiUsage {
    * @return Minimum sleep duration in milliseconds, zero if no sleep is necessary
    */
   public long getMinSleepDuration(long timestamp, int weight) {
-    long minSleepDuration = 0;
-    for (ApiCallBucket bucket : buckets.values()) {
-      long d = bucket.getMinSleepDuration(timestamp, weight);
-      minSleepDuration = Math.max(minSleepDuration, d);
-    }
-    return minSleepDuration;
+    return buckets.values().stream()
+        .mapToLong(bucket -> bucket.getMinSleepDuration(timestamp, weight))
+        .max().orElse(0);
   }
 
   /**
