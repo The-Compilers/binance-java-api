@@ -7,7 +7,7 @@ import java.util.Map;
  * Usage of API calls with specific type, with several possible time windows.
  */
 public class ApiUsage {
-  private final Map<Integer, ApiCallLog> apiCallLogs = new HashMap<>();
+  private final Map<Integer, ApiCallBucket> buckets = new HashMap<>();
 
   /**
    * Set a limit of maximum allowed weight w every s seconds.
@@ -17,7 +17,7 @@ public class ApiUsage {
    * @return This object, for chained method calls
    */
   public ApiUsage setLimit(int maxWeight, int perSeconds) {
-    apiCallLogs.put(perSeconds, new ApiCallLog(maxWeight, perSeconds * 1000L));
+    buckets.put(perSeconds, new ApiCallBucket(maxWeight, perSeconds * 1000L));
     return this;
   }
 
@@ -30,8 +30,8 @@ public class ApiUsage {
    */
   public long getMinSleepDuration(long timestamp, int weight) {
     long minSleepDuration = 0;
-    for (ApiCallLog log : apiCallLogs.values()) {
-      long d = log.getMinSleepDuration(timestamp, weight);
+    for (ApiCallBucket bucket : buckets.values()) {
+      long d = bucket.getMinSleepDuration(timestamp, weight);
       minSleepDuration = Math.max(minSleepDuration, d);
     }
     return minSleepDuration;
@@ -45,8 +45,8 @@ public class ApiUsage {
    */
   public void addCall(long time, int weight) {
     ApiCallEntry entry = new ApiCallEntry(time, weight);
-    for (ApiCallLog log : apiCallLogs.values()) {
-      log.addCall(entry);
+    for (ApiCallBucket bucket : buckets.values()) {
+      bucket.addCall(entry);
     }
   }
 
@@ -56,8 +56,8 @@ public class ApiUsage {
    * @param timeNow The time "now" - used to decide which API calls have timed out now
    */
   public void forgetOldApiCalls(long timeNow) {
-    for (ApiCallLog log : apiCallLogs.values()) {
-      log.forgetOldApiCalls(timeNow);
+    for (ApiCallBucket bucket : buckets.values()) {
+      bucket.forgetOldApiCalls(timeNow);
     }
   }
 }

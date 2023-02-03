@@ -5,9 +5,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Log of all API calls for within a specific time window, with weight limit inside the window.
+ * A 'bucket' of all API calls within a specific time window, with specific allowed weight limit.
  */
-public class ApiCallLog {
+public class ApiCallBucket {
   private long duration;
   private int maxWeight;
 
@@ -21,7 +21,7 @@ public class ApiCallLog {
    * @param maxWeight maximum allowed weight within the specified duration
    * @param duration  The duration of the sliding time window, in milliseconds
    */
-  public ApiCallLog(int maxWeight, long duration) {
+  public ApiCallBucket(int maxWeight, long duration) {
     this.maxWeight = maxWeight;
     this.duration = duration;
   }
