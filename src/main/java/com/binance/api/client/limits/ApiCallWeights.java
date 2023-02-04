@@ -1,13 +1,13 @@
 package com.binance.api.client.limits;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
  * Weights of a specific API call.
  */
 public class ApiCallWeights {
-  private final Map<ApiLimitType, Integer> weights = new HashMap<>();
+  private final Map<ApiLimitType, Integer> weights = new EnumMap<>(ApiLimitType.class);
 
   /**
    * Set a weight for a request, in a specific quota.

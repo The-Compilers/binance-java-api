@@ -47,11 +47,12 @@ public class ApiCallBucket {
       minSleepTime = getMinSleepTimeToRelease(apiCallTime, minWeightToRelease);
     }
 
-    System.out.println("maxWeight=" + maxWeight + ", duration=" + duration
+    debugPrint("maxWeight=" + maxWeight + ", duration=" + duration
         + ", usedWeight=" + usedWeight + ", weight=" + weight + ", minSleep=" + minSleepTime);
 
     return minSleepTime;
   }
+
 
   private long getMinSleepTimeToRelease(long apiCallTime, int minWeightToRelease) {
     long timestampOfLastRequest = 0;
@@ -93,7 +94,7 @@ public class ApiCallBucket {
     while (it.hasNext()) {
       ApiCallEntry e = it.next();
       if (hasExpired(e, timeNow)) {
-        System.out.println("Api call expired, duration=" + duration + ", weight=" + e.getWeight());
+        debugPrint("Api call expired, duration=" + duration + ", weight=" + e.getWeight());
         usedWeight -= e.getWeight();
         it.remove();
       }
@@ -120,5 +121,9 @@ public class ApiCallBucket {
    */
   public int getMaxWeight() {
     return maxWeight;
+  }
+
+  private static void debugPrint(String msg) {
+    System.out.println(msg);
   }
 }

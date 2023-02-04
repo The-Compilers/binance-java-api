@@ -100,18 +100,18 @@ public class ApiLimitAccountantTest {
   }
 
   private void resetAccountantToOneIpCall(long time, int weight) {
-    resetAccountant(new long[]{time}, new int[]{weight}, new ApiLimitType[]{ApiLimitType.ApiIp});
+    resetAccountant(new long[]{time}, new int[]{weight}, new ApiLimitType[]{ApiLimitType.API_IP});
   }
 
   private void resetAccountantToThreeIpCalls(long time1, int weight1, long time2, int weight2,
                                              long time3, int weight3) {
     resetAccountant(new long[]{time1, time2, time3}, new int[]{weight1, weight2, weight3},
-        new ApiLimitType[]{ApiLimitType.ApiIp, ApiLimitType.ApiIp, ApiLimitType.ApiIp});
+        new ApiLimitType[]{ApiLimitType.API_IP, ApiLimitType.API_IP, ApiLimitType.API_IP});
   }
 
   private void resetAccountantToSapiIpAndUidCall(long time, int ipWeight, int uidWeight) {
     resetAccountant(new long[]{time, time}, new int[]{ipWeight, uidWeight},
-        new ApiLimitType[]{ApiLimitType.SapiIp, ApiLimitType.SapiUid});
+        new ApiLimitType[]{ApiLimitType.SAPI_IP, ApiLimitType.SAPI_UID});
 
   }
 
@@ -131,11 +131,11 @@ public class ApiLimitAccountantTest {
 
 
   private ApiCallWeights createIpWeight(int weight) {
-    return new ApiCallWeights().setWeight(ApiLimitType.ApiIp, weight);
+    return new ApiCallWeights().setWeight(ApiLimitType.API_IP, weight);
   }
   private ApiCallWeights createSapiIpUidWeight(int weight) {
     return new ApiCallWeights()
-        .setWeight(ApiLimitType.SapiIp, weight)
-        .setWeight(ApiLimitType.SapiUid, weight);
+        .setWeight(ApiLimitType.SAPI_IP, weight)
+        .setWeight(ApiLimitType.SAPI_UID, weight);
   }
 }

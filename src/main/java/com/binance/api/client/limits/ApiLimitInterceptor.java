@@ -14,7 +14,7 @@ import static com.binance.api.client.limits.ApiWeightHeaders.*;
  * to avoid bans.
  */
 public class ApiLimitInterceptor implements Interceptor {
-  private final static Logger logger = Logger.getLogger(ApiLimitInterceptor.class);
+  private static final Logger logger = Logger.getLogger(ApiLimitInterceptor.class);
 
 
   @NotNull
@@ -45,10 +45,10 @@ public class ApiLimitInterceptor implements Interceptor {
 
   private ApiCallWeights getApiCallWeights(Request request) {
     ApiCallWeights weights = new ApiCallWeights();
-    weights.setWeight(ApiIp, getWeightFromHeader(request.header(API_WEIGHT_PER_IP_KEY)))
-        .setWeight(Order, getWeightFromHeader(request.header(API_WEIGHT_PER_ORDER)))
-        .setWeight(SapiIp, getWeightFromHeader(request.header(SAPI_WEIGHT_PER_IP_KEY)))
-        .setWeight(SapiUid, getWeightFromHeader(request.header(SAPI_WEIGHT_PER_UID_KEY)));
+    weights.setWeight(API_IP, getWeightFromHeader(request.header(API_WEIGHT_PER_IP_KEY)))
+        .setWeight(ORDER, getWeightFromHeader(request.header(API_WEIGHT_PER_ORDER)))
+        .setWeight(SAPI_IP, getWeightFromHeader(request.header(SAPI_WEIGHT_PER_IP_KEY)))
+        .setWeight(SAPI_UID, getWeightFromHeader(request.header(SAPI_WEIGHT_PER_UID_KEY)));
     return weights;
   }
 
@@ -81,7 +81,7 @@ public class ApiLimitInterceptor implements Interceptor {
     try {
       Thread.sleep(duration);
     } catch (InterruptedException e) {
-      throw new RuntimeException("Rate-limit safety sleep was interrupted");
+      Thread.currentThread().interrupt();
     }
   }
 

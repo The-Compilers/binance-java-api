@@ -1,6 +1,6 @@
 package com.binance.api.client.limits;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Map;
 public class ApiLimitAccountant {
   private static final ApiLimitAccountant instance = new ApiLimitAccountant();
 
-  private final Map<ApiLimitType, ApiUsage> usages = new HashMap<>();
+  private final Map<ApiLimitType, ApiUsage> usages = new EnumMap<>(ApiLimitType.class);
 
   /**
    * Get a singleton instance of the class.
@@ -34,10 +34,10 @@ public class ApiLimitAccountant {
   }
 
   private void registerDefaultLimits() {
-    usages.put(ApiLimitType.ApiIp, new ApiUsage().setLimit(1200, 60).setLimit(6100, 5 * 60));
-    usages.put(ApiLimitType.Order, new ApiUsage().setLimit(50, 10).setLimit(160000, 24 * 60 * 60));
-    usages.put(ApiLimitType.SapiIp, new ApiUsage().setLimit(12000, 60));
-    usages.put(ApiLimitType.SapiUid, new ApiUsage().setLimit(180000, 60));
+    usages.put(ApiLimitType.API_IP, new ApiUsage().setLimit(1200, 60).setLimit(6100, 5 * 60));
+    usages.put(ApiLimitType.ORDER, new ApiUsage().setLimit(50, 10).setLimit(160000, 24 * 60 * 60));
+    usages.put(ApiLimitType.SAPI_IP, new ApiUsage().setLimit(12000, 60));
+    usages.put(ApiLimitType.SAPI_UID, new ApiUsage().setLimit(180000, 60));
   }
 
   /**

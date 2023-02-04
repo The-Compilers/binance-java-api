@@ -5,5 +5,5 @@ package com.binance.api.client.limits;
  * private account (SAPI) limit per IP, per user (UID) limit, and order-related.
  */
 enum ApiLimitType {
-  ApiIp, SapiIp, SapiUid, Order;
+  API_IP, SAPI_IP, SAPI_UID, ORDER;
 }

@@ -19,4 +19,10 @@ public class ApiWeightHeaders {
   public static final String ORDER_COUNT_PREFIX = "x-mbx-order-count-";
   public static final String SAPI_IP_USAGE = "x-sapi-used-ip-weight-1m";
   public static final String SAPI_UID_USAGE = "x-sapi-used-uid-weight-1m";
+
+  /**
+   * No instantiation allowed.
+   */
+  private ApiWeightHeaders() {
+  }
 }
