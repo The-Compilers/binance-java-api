@@ -44,11 +44,12 @@ public class ApiLimitAccountant {
    * Find the minimum sleep duration before the next request can be sent, according to the
    * currently used rate limits
    *
-   * @param weights The weights of the request (API call) to be made
+   * @param weights   The weights of the request (API call) to be made
+   * @param timestamp The time moment to consider (the `now`).
+   *                  Note: this can be set so that it is easier to test.
    * @return The sleep duration or null if no sleep is necessary.
    */
-  public Long getMinSleepDuration(ApiCallWeights weights) {
-    long timestamp = System.currentTimeMillis();
+  public long getMinSleepDuration(ApiCallWeights weights, long timestamp) {
     long minSleepDuration = 0;
     for (ApiLimitType type : weights.getQuotaTypes()) {
       int weight = weights.getWeight(type);
@@ -61,21 +62,33 @@ public class ApiLimitAccountant {
   /**
    * Add the used weights to the log.
    *
-   * @param weights The weights of the new API call that has been made. Mostly the weight will
-   *                be of one specific type (such as per-IP /api weight), but in general there
-   *                could be several weights, (see, for example, New Order API call).
+   * @param weights   The weights of the new API call that has been made. Mostly the weight will
+   *                  be of one specific type (such as per-IP /api weight), but in general there
+   *                  could be several weights, (see, for example, New Order API call).
+   * @param timestamp The time moment to consider (the `now`).
+   *                  Note: this can be set so that it is easier to test.
    */
-  public void addUsedWeights(ApiCallWeights weights) {
-    long timeNow = System.currentTimeMillis();
+  public void addUsedWeights(ApiCallWeights weights, long timestamp) {
     for (ApiLimitType type : weights.getQuotaTypes()) {
-      usages.get(type).addCall(timeNow, weights.getWeight(type));
+      usages.get(type).addCall(timestamp, weights.getWeight(type));
     }
   }
 
-  public void forgetOldApiCalls() {
-    long timeNow = System.currentTimeMillis();
+  /**
+   * Forget all API calls which have timed out at the given time moment.
+   *
+   * @param timestamp The time to consider when detecting which API calls (weights) have time out.
+   */
+  public void forgetOldApiCalls(long timestamp) {
     for (ApiUsage usage : usages.values()) {
-      usage.forgetOldApiCalls(timeNow);
+      usage.forgetOldApiCalls(timestamp);
     }
+  }
+
+  /**
+   * Forget all previously made API calls (their weights).
+   */
+  public void forgetAllApiCalls() {
+    forgetOldApiCalls(Long.MAX_VALUE - 1000);
   }
 }

@@ -22,10 +22,11 @@ public class ApiLimitInterceptor implements Interceptor {
   public Response intercept(@NotNull Chain chain) throws IOException {
     ApiLimitAccountant accountant = ApiLimitAccountant.getInstance();
 
-    accountant.forgetOldApiCalls();
+    long timeNow = System.currentTimeMillis();
+    accountant.forgetOldApiCalls(timeNow);
     ApiCallWeights weights = getApiCallWeights(chain.request());
     sleepIfApiLimitsExceeded(weights);
-    accountant.addUsedWeights(weights);
+    accountant.addUsedWeights(weights, timeNow);
 
     Response response = chain.proceed(chain.request());
     debugPrintUsedWeightHeaders(response);
@@ -64,7 +65,8 @@ public class ApiLimitInterceptor implements Interceptor {
   }
 
   private void sleepIfApiLimitsExceeded(ApiCallWeights weights) {
-    long minSleepTime = ApiLimitAccountant.getInstance().getMinSleepDuration(weights);
+    long timestamp = System.currentTimeMillis();
+    long minSleepTime = ApiLimitAccountant.getInstance().getMinSleepDuration(weights, timestamp);
     if (minSleepTime > 0) {
       sleep(minSleepTime);
     }
