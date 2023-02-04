@@ -11,6 +11,7 @@ import com.binance.api.client.domain.account.request.CancelOrderResponse;
 import com.binance.api.client.domain.account.request.OrderRequest;
 import com.binance.api.client.domain.account.request.OrderStatusRequest;
 import com.binance.api.client.exception.BinanceApiException;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 
 import java.util.List;
 

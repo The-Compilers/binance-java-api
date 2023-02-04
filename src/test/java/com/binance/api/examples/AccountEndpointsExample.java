@@ -2,6 +2,7 @@ package com.binance.api.examples;
 
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.Trade;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.util.List;

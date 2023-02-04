@@ -2,12 +2,15 @@ package com.binance.api.examples;
 
 import com.binance.api.client.constant.TimeRange;
 import com.binance.api.client.domain.account.dust.DustTransferLog;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Example of Dust transfer endpoints
  */
 public class DustTransferExample extends AuthenticatedExampleBase {
   public static void main(String[] args) {
+    PropertyConfigurator.configure("log4j.properties");
     DustTransferExample example = new DustTransferExample();
     example.run();
   }

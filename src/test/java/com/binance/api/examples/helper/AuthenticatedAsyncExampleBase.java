@@ -1,4 +1,4 @@
-package com.binance.api.examples;
+package com.binance.api.examples.helper;
 
 import com.binance.api.client.BinanceApiAsyncRestClient;
 import com.binance.api.client.BinanceApiClientFactory;

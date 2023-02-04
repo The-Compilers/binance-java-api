@@ -1,7 +1,7 @@
 package com.binance.api.examples;
 
 import com.binance.api.client.constant.TimeRange;
-import java.util.List;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 
 /**
  * Example getting withdraw history.

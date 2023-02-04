@@ -2,6 +2,7 @@ package com.binance.api.examples;
 
 import com.binance.api.client.constant.TimeRange;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 
 /**
  * Examples of Fiat endpoints.

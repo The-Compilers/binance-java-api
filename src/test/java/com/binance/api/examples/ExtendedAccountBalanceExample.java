@@ -1,6 +1,7 @@
 package com.binance.api.examples;
 
 import com.binance.api.client.domain.account.ExtendedAssetBalance;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 import java.util.List;
 
 /**
