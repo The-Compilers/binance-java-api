@@ -1,5 +1,6 @@
 package com.binance.api.client.limits;
 
+import org.apache.log4j.Logger;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,6 +15,8 @@ public class ApiCallBucket {
   private int usedWeight;
 
   private final Queue<ApiCallEntry> apiCalls = new LinkedList<>();
+
+  private static final Logger logger = Logger.getLogger(ApiCallBucket.class);
 
   /**
    * Create a new API call log.
@@ -124,6 +127,6 @@ public class ApiCallBucket {
   }
 
   private static void debugPrint(String msg) {
-    System.out.println(msg);
+    logger.info(msg);
   }
 }

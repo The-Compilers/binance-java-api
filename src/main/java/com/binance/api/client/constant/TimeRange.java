@@ -24,7 +24,7 @@ public class TimeRange {
    * Create a time range for the given month.
    *
    * @param monthString The month as a string, in the format YYYY-mm
-   * @return
+   * @return TimeRange from 00:00:00 on the first day until 23:59:59 on the last day of the month
    * @throws IllegalArgumentException If the provided month string is invalid
    */
   public static TimeRange createForMonth(String monthString) throws IllegalArgumentException {
@@ -36,9 +36,47 @@ public class TimeRange {
 
     int year = parseInteger(parts[0]);
     int month = parseInteger(parts[1]);
+    return TimeRange.createForMonth(month, year);
+  }
+
+  /**
+   * Create a time range for the given month.
+   *
+   * @param month The month as an integer in the range 1-12
+   * @param year  The year as a four-digit integer
+   * @return TimeRange from 00:00:00 on the first day until 23:59:59 on the last day of the month
+   * @throws IllegalArgumentException If the provided month or year is invalid
+   */
+  public static TimeRange createForMonth(int month, int year) throws IllegalArgumentException {
+    if (month < 1 || month > 12) throw new IllegalArgumentException("Invalid month: " + month);
+    if (year < 1000 || year > 9999) throw new IllegalArgumentException("Invalid year: " + year);
+
     int lastDayOfMonth = getDaysInMonth(year, month);
     String startString = year + "-" + month + "-01 00:00:00";
     String endString = year + "-" + month + "-" + lastDayOfMonth + " 23:59:59";
+
+    return new TimeRange(Util.getTimestampFor(startString), Util.getTimestampFor(endString));
+  }
+
+  /**
+   * Create a time range for a given day.
+   *
+   * @param day   The day as an integer
+   * @param month The month as an integer in the range 1-12
+   * @param year  The year as a four-digit integer
+   * @return TimeRange from 00:00:00 on the first day until 23:59:59 on the last day of the month
+   * @throws IllegalArgumentException If the provided month or year is invalid
+   */
+  public static TimeRange createForDay(int day, int month, int year) {
+    if (month < 1 || month > 12) throw new IllegalArgumentException("Invalid month: " + month);
+    if (year < 1000 || year > 9999) throw new IllegalArgumentException("Invalid year: " + year);
+    if (day < 1 || day > getDaysInMonth(year, month)) {
+      throw new IllegalArgumentException("Invalid dat: " + month);
+    }
+
+    String dayString = year + "-" + month + "-" + day;
+    String startString = dayString + " 00:00:00";
+    String endString = dayString + " 23:59:59";
 
     return new TimeRange(Util.getTimestampFor(startString), Util.getTimestampFor(endString));
   }
@@ -61,7 +99,14 @@ public class TimeRange {
     return endTime;
   }
 
-  private static int getDaysInMonth(int year, int month) {
+  /**
+   * Get the number of days in a given month.
+   *
+   * @param year  The year to consider
+   * @param month The month to consider
+   * @return The number of days in the given month: from 28 to 31
+   */
+  public static int getDaysInMonth(int year, int month) {
     YearMonth yearMonthObject = YearMonth.of(year, month);
     return yearMonthObject.lengthOfMonth();
   }

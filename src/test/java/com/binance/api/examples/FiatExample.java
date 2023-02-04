@@ -3,12 +3,14 @@ package com.binance.api.examples;
 import com.binance.api.client.constant.TimeRange;
 import com.binance.api.client.domain.fiat.FiatPaymentType;
 import com.binance.api.examples.helper.AuthenticatedExampleBase;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Examples of Fiat endpoints.
  */
 public class FiatExample extends AuthenticatedExampleBase {
   public static void main(String[] args) {
+    PropertyConfigurator.configure("log4j.properties");
     FiatExample examples = new FiatExample();
     examples.run();
   }
@@ -25,6 +27,8 @@ public class FiatExample extends AuthenticatedExampleBase {
 
   private void printFiatDepositHistory() {
     printDeposits("2022-12");
+    printDeposits("2023-01");
+    printDeposits("2023-02");
   }
 
   private void printFiatWithdrawHistory() {

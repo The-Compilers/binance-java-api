@@ -12,6 +12,10 @@ public class AllOrdersRequest extends OrderRequest {
 
   private Long orderId;
 
+  private Long startTime;
+
+  private Long endTime;
+
   private Integer limit;
 
   public AllOrdersRequest(String symbol) {
@@ -37,10 +41,30 @@ public class AllOrdersRequest extends OrderRequest {
     return this;
   }
 
+  public Long getStartTime() {
+    return startTime;
+  }
+
+  public AllOrdersRequest startTime(Long startTime) {
+    this.startTime = startTime;
+    return this;
+  }
+
+  public Long getEndTime() {
+    return endTime;
+  }
+
+  public AllOrdersRequest endTime(Long endTime) {
+    this.endTime = endTime;
+    return this;
+  }
+
   @Override
   public String toString() {
     return new ToStringBuilder(this, BinanceApiConstants.TO_STRING_BUILDER_STYLE)
         .append("orderId", orderId)
+        .append("startTime", startTime)
+        .append("endTime", endTime)
         .append("limit", limit)
         .toString();
   }

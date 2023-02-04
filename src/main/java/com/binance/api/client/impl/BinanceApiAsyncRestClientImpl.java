@@ -162,6 +162,7 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   @Override
   public void getAllOrders(AllOrdersRequest orderRequest, BinanceApiCallback<List<Order>> callback) {
     binanceApiService.getAllOrders(orderRequest.getSymbol(),
+        orderRequest.getStartTime(), orderRequest.getEndTime(),
         orderRequest.getOrderId(), orderRequest.getLimit(),
         orderRequest.getRecvWindow(), orderRequest.getTimestamp()).enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
