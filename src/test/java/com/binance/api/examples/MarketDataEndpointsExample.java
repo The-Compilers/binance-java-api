@@ -30,10 +30,6 @@ public class MarketDataEndpointsExample {
     TickerStatistics tickerStatistics = client.get24HrPriceStatistics("NEOETH");
     System.out.println(tickerStatistics);
 
-    // Getting all latest prices
-    List<TickerPrice> allPrices = client.getAllPrices();
-    System.out.println(allPrices);
-
     // Getting agg trades
     List<AggTrade> aggTrades = client.getAggTrades("NEOETH");
     System.out.println(aggTrades);
@@ -41,10 +37,6 @@ public class MarketDataEndpointsExample {
     // Weekly candlestick bars for a symbol
     List<Candlestick> candlesticks = client.getCandlestickBars("NEOETH", CandlestickInterval.WEEKLY);
     System.out.println(candlesticks);
-
-    // Getting all book tickers
-    List<BookTicker> allBookTickers = client.getBookTickers();
-    System.out.println(allBookTickers);
 
     // Exception handling
     try {

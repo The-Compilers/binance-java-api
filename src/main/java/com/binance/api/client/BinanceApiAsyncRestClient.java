@@ -49,11 +49,6 @@ public interface BinanceApiAsyncRestClient {
    */
   void getExchangeInfo(BinanceApiCallback<ExchangeInfo> callback);
 
-  /**
-   * ALL supported assets and whether they can be withdrawn.
-   */
-  void getAllAssets(BinanceApiCallback<List<Asset>> callback);
-
   // Market Data endpoints
 
   /**
@@ -143,26 +138,12 @@ public interface BinanceApiAsyncRestClient {
   void getAll24HrPriceStatistics(BinanceApiCallback<List<TickerStatistics>> callback);
 
   /**
-   * Get the latest price for all symbols (asynchronous).
-   *
-   * @param callback the callback that handles the response
-   */
-  void getAllPrices(BinanceApiCallback<List<TickerPrice>> callback);
-
-  /**
    * Get the latest price for <code>symbol</code> (asynchronous).
    *
    * @param symbol   ticker symbol (e.g. ETHBTC)
    * @param callback the callback that handles the response
    */
   void getPrice(String symbol, BinanceApiCallback<TickerPrice> callback);
-
-  /**
-   * Get best price/qty on the order book for all symbols (asynchronous).
-   *
-   * @param callback the callback that handles the response
-   */
-  void getBookTickers(BinanceApiCallback<List<BookTicker>> callback);
 
   // Account endpoints
 

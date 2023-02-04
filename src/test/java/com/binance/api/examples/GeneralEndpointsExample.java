@@ -39,8 +39,5 @@ public class GeneralEndpointsExample {
     System.out.println(priceFilter.getMinPrice());
     System.out.println(priceFilter.getTickSize());
 
-    // Obtain asset information
-    List<Asset> allAssets = client.getAllAssets();
-    System.out.println(allAssets.stream().filter(asset -> asset.getAssetCode().equals("BNB")).findFirst().get());
   }
 }

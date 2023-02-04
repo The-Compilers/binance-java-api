@@ -37,9 +37,5 @@ public class GeneralEndpointsExampleAsync {
       System.out.println(priceFilter.getMinPrice());
       System.out.println(priceFilter.getTickSize());
     });
-
-    // Obtain asset information
-    client.getAllAssets(allAssets ->
-        System.out.println(allAssets.stream().filter(asset -> asset.getAssetCode().equals("BNB")).findFirst().get()));
   }
 }

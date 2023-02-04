@@ -63,12 +63,6 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
     binanceApiService.getExchangeInfo().enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
-  @Override
-  public void getAllAssets(BinanceApiCallback<List<Asset>> callback) {
-    binanceApiService.getAllAssets(BinanceApiConfig.getAssetInfoApiBaseUrl() + "assetWithdraw/getAllAsset.html")
-        .enqueue(new BinanceApiCallbackAdapter<>(callback));
-  }
-
   // Market Data endpoints
 
   @Override
@@ -117,18 +111,8 @@ public class BinanceApiAsyncRestClientImpl implements BinanceApiAsyncRestClient 
   }
 
   @Override
-  public void getAllPrices(BinanceApiCallback<List<TickerPrice>> callback) {
-    binanceApiService.getLatestPrices().enqueue(new BinanceApiCallbackAdapter<>(callback));
-  }
-
-  @Override
   public void getPrice(String symbol, BinanceApiCallback<TickerPrice> callback) {
     binanceApiService.getLatestPrice(symbol).enqueue(new BinanceApiCallbackAdapter<>(callback));
-  }
-
-  @Override
-  public void getBookTickers(BinanceApiCallback<List<BookTicker>> callback) {
-    binanceApiService.getBookTickers().enqueue(new BinanceApiCallbackAdapter<>(callback));
   }
 
   @Override

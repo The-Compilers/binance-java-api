@@ -53,12 +53,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
     return executeSync(binanceApiService.getExchangeInfo());
   }
 
-  @Override
-  public List<Asset> getAllAssets() {
-    return executeSync(binanceApiService
-        .getAllAssets(BinanceApiConfig.getAssetInfoApiBaseUrl() + "assetWithdraw/getAllAsset.html"));
-  }
-
   // Market Data endpoints
 
   @Override
@@ -111,16 +105,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   @Override
   public TickerPrice getPrice(String symbol) {
     return executeSync(binanceApiService.getLatestPrice(symbol));
-  }
-
-  @Override
-  public List<TickerPrice> getAllPrices() {
-    return executeSync(binanceApiService.getLatestPrices());
-  }
-
-  @Override
-  public List<BookTicker> getBookTickers() {
-    return executeSync(binanceApiService.getBookTickers());
   }
 
   @Override
