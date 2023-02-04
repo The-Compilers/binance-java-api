@@ -3,6 +3,7 @@ package com.binance.api.examples;
 import com.binance.api.client.constant.TimeRange;
 import com.binance.api.client.domain.account.savings.LendingType;
 import com.binance.api.client.domain.account.savings.SavingsInterest;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 import java.util.List;
 
 /**

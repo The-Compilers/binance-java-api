@@ -53,12 +53,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
     return executeSync(binanceApiService.getExchangeInfo());
   }
 
-  @Override
-  public List<Asset> getAllAssets() {
-    return executeSync(binanceApiService
-        .getAllAssets(BinanceApiConfig.getAssetInfoApiBaseUrl() + "assetWithdraw/getAllAsset.html"));
-  }
-
   // Market Data endpoints
 
   @Override
@@ -114,16 +108,6 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
   }
 
   @Override
-  public List<TickerPrice> getAllPrices() {
-    return executeSync(binanceApiService.getLatestPrices());
-  }
-
-  @Override
-  public List<BookTicker> getBookTickers() {
-    return executeSync(binanceApiService.getBookTickers());
-  }
-
-  @Override
   public NewOrderResponse newOrder(NewOrder order) {
     final Call<NewOrderResponse> call;
     if (order.getQuoteOrderQty() == null) {
@@ -173,8 +157,11 @@ public class BinanceApiRestClientImpl implements BinanceApiRestClient {
 
   @Override
   public List<Order> getAllOrders(AllOrdersRequest orderRequest) {
-    return executeSync(binanceApiService.getAllOrders(orderRequest.getSymbol(), orderRequest.getOrderId(),
-        orderRequest.getLimit(), orderRequest.getRecvWindow(), orderRequest.getTimestamp()));
+    return executeSync(binanceApiService.getAllOrders(
+        orderRequest.getSymbol(), orderRequest.getOrderId(),
+        orderRequest.getStartTime(), orderRequest.getEndTime(),
+        orderRequest.getLimit(), orderRequest.getRecvWindow(),
+        orderRequest.getTimestamp()));
   }
 
   @Override

@@ -141,6 +141,10 @@ public class Account {
         return assetBalance;
       }
     }
+    return createEmptyBalance(symbol);
+  }
+
+  private static AssetBalance createEmptyBalance(String symbol) {
     AssetBalance emptyBalance = new AssetBalance();
     emptyBalance.setAsset(symbol);
     emptyBalance.setFree("0");

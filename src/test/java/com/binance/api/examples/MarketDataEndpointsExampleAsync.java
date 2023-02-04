@@ -31,20 +31,12 @@ public class MarketDataEndpointsExampleAsync {
       System.out.println(response);
     });
 
-    // Getting all latest prices (async)
-    client.getAllPrices((List<TickerPrice> response) -> {
-      System.out.println(response);
-    });
-
     // Getting agg trades (async)
     client.getAggTrades("NEOETH", (List<AggTrade> response) -> System.out.println(response));
 
     // Weekly candlestick bars for a symbol
     client.getCandlestickBars("NEOETH", CandlestickInterval.WEEKLY,
         (List<Candlestick> response) -> System.out.println(response));
-
-    // Book tickers (async)
-    client.getBookTickers(response -> System.out.println(response));
 
     // Exception handling
     try {

@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.http.*;
 
 import java.util.List;
+import static com.binance.api.client.limits.ApiWeightHeaders.*;
 
 /**
  * Binance's REST API URL mappings and endpoint security configuration.
@@ -30,56 +31,58 @@ public interface BinanceApiService {
 
   // General endpoints
 
+  @Headers(API_WEIGHT_PER_IP + 1)
   @GET("/api/v1/ping")
   Call<Void> ping();
 
+  @Headers(API_WEIGHT_PER_IP + 1)
   @GET("/api/v1/time")
   Call<ServerTime> getServerTime();
 
+  @Headers(API_WEIGHT_PER_IP + 10)
   @GET("/api/v3/exchangeInfo")
   Call<ExchangeInfo> getExchangeInfo();
 
-  @GET
-  Call<List<Asset>> getAllAssets(@Url String url);
+
+  @Headers(API_WEIGHT_PER_IP + 50)
+  @GET("/api/v3/depth")
+  Call<OrderBook> getOrderBook(@Query("symbol") String symbol, @Query("limit") Integer limit);
 
   // Market data endpoints
 
-  @GET("/api/v1/depth")
-  Call<OrderBook> getOrderBook(@Query("symbol") String symbol, @Query("limit") Integer limit);
-
-  @GET("/api/v1/trades")
+  @Headers(API_WEIGHT_PER_IP + 1)
+  @GET("/api/v3/trades")
   Call<List<TradeHistoryItem>> getTrades(@Query("symbol") String symbol, @Query("limit") Integer limit);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
-  @GET("/api/v1/historicalTrades")
+  @Headers(API_WEIGHT_PER_IP + 5)
+  @GET("/api/v3/historicalTrades")
   Call<List<TradeHistoryItem>> getHistoricalTrades(@Query("symbol") String symbol, @Query("limit") Integer limit, @Query("fromId") Long fromId);
 
-  @GET("/api/v1/aggTrades")
+  @Headers(API_WEIGHT_PER_IP + 1)
+  @GET("/api/v3/aggTrades")
   Call<List<AggTrade>> getAggTrades(@Query("symbol") String symbol, @Query("fromId") String fromId, @Query("limit") Integer limit,
                                     @Query("startTime") Long startTime, @Query("endTime") Long endTime);
 
-  @GET("/api/v1/klines")
+  @Headers(API_WEIGHT_PER_IP + 1)
+  @GET("/api/v3/klines")
   Call<List<Candlestick>> getCandlestickBars(@Query("symbol") String symbol, @Query("interval") String interval, @Query("limit") Integer limit,
                                              @Query("startTime") Long startTime, @Query("endTime") Long endTime);
 
-  @GET("/api/v1/ticker/24hr")
+  @Headers(API_WEIGHT_PER_IP + 40)
+  @GET("/api/v3/ticker/24hr")
   Call<TickerStatistics> get24HrPriceStatistics(@Query("symbol") String symbol);
 
-  @GET("/api/v1/ticker/24hr")
+  @Headers(API_WEIGHT_PER_IP + 40)
+  @GET("/api/v3/ticker/24hr")
   Call<List<TickerStatistics>> getAll24HrPriceStatistics();
 
-  @GET("/api/v1/ticker/allPrices")
-  Call<List<TickerPrice>> getLatestPrices();
-
+  @Headers(API_WEIGHT_PER_IP + 2)
   @GET("/api/v3/ticker/price")
   Call<TickerPrice> getLatestPrice(@Query("symbol") String symbol);
 
-  @GET("/api/v1/ticker/allBookTickers")
-  Call<List<BookTicker>> getBookTickers();
-
   // Account endpoints
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 1, API_WEIGHT_PER_ORDER + 1})
   @POST("/api/v3/order")
   Call<NewOrderResponse> newOrder(@Query("symbol") String symbol, @Query("side") OrderSide side, @Query("type") OrderType type,
                                   @Query("timeInForce") TimeInForce timeInForce, @Query("quantity") String quantity, @Query("price") String price,
@@ -87,7 +90,7 @@ public interface BinanceApiService {
                                   @Query("icebergQty") String icebergQty, @Query("newOrderRespType") NewOrderResponseType newOrderRespType,
                                   @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 1, API_WEIGHT_PER_ORDER + 1})
   @POST("/api/v3/order")
   Call<NewOrderResponse> newOrderQuoteQty(@Query("symbol") String symbol, @Query("side") OrderSide side, @Query("type") OrderType type,
                                           @Query("timeInForce") TimeInForce timeInForce, @Query("quoteOrderQty") String quoteOrderQty, @Query("price") String price,
@@ -95,7 +98,7 @@ public interface BinanceApiService {
                                           @Query("icebergQty") String icebergQty, @Query("newOrderRespType") NewOrderResponseType newOrderRespType,
                                           @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 1, API_WEIGHT_PER_ORDER + 1})
   @POST("/api/v3/order/test")
   Call<Void> newOrderTest(@Query("symbol") String symbol, @Query("side") OrderSide side, @Query("type") OrderType type,
                           @Query("timeInForce") TimeInForce timeInForce, @Query("quantity") String quantity, @Query("price") String price,
@@ -103,52 +106,59 @@ public interface BinanceApiService {
                           @Query("icebergQty") String icebergQty, @Query("newOrderRespType") NewOrderResponseType newOrderRespType,
                           @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 2})
   @GET("/api/v3/order")
   Call<Order> getOrderStatus(@Query("symbol") String symbol, @Query("orderId") Long orderId,
                              @Query("origClientOrderId") String origClientOrderId, @Query("recvWindow") Long recvWindow,
                              @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 1})
   @DELETE("/api/v3/order")
   Call<CancelOrderResponse> cancelOrder(@Query("symbol") String symbol, @Query("orderId") Long orderId,
                                         @Query("origClientOrderId") String origClientOrderId, @Query("newClientOrderId") String newClientOrderId,
                                         @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 40})
   @GET("/api/v3/openOrders")
   Call<List<Order>> getOpenOrders(@Query("symbol") String symbol, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/allOrders")
-  Call<List<Order>> getAllOrders(@Query("symbol") String symbol, @Query("orderId") Long orderId,
-                                 @Query("limit") Integer limit, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  Call<List<Order>> getAllOrders(
+      @Query("symbol") String symbol,
+      @Query("orderId") Long orderId,
+      @Query("startTime") Long startTime,
+      @Query("endTime") Long endTime,
+      @Query("limit") Integer limit,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 1})
   @DELETE("/api/v3/orderList")
   Call<CancelOrderListResponse> cancelOrderList(@Query("symbol") String symbol, @Query("orderListId") Long orderListId, @Query("listClientOrderId") String listClientOrderId,
                                                 @Query("newClientOrderId") String newClientOrderId, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 2})
   @GET("/api/v3/orderList")
   Call<OrderList> getOrderListStatus(@Query("orderListId") Long orderListId, @Query("origClientOrderId") String origClientOrderId,
                                      @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/allOrderList")
   Call<List<OrderList>> getAllOrderList(@Query("fromId") Long fromId, @Query("startTime") Long startTime, @Query("endTime") Long endTime,
                                         @Query("limit") Integer limit, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/account")
   Call<Account> getAccount(@Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, API_WEIGHT_PER_IP + 10})
   @GET("/api/v3/myTrades")
   Call<List<Trade>> getMyTrades(@Query("symbol") String symbol, @Query("limit") Integer limit, @Query("fromId") Long fromId,
                                 @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_UID + 600})
   @POST("/sapi/v1/capital/withdraw/apply")
   Call<WithdrawResult> withdraw(
       @Query("coin") String coin,
@@ -184,7 +194,7 @@ public interface BinanceApiService {
    * @param timestamp
    * @return
    */
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/capital/deposit/hisrec")
   Call<List<Deposit>> getDepositHistory(@Query("coin") String coin, @Query("status") Integer status,
                                         @Query("startTime") Long startTime, @Query("endTime") Long endTime,
@@ -218,7 +228,7 @@ public interface BinanceApiService {
    * @param timestamp
    * @return HTTP Call for the API endpoint
    */
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/capital/withdraw/history")
   Call<List<Withdraw>> getWithdrawHistory(
       @Query("coin") String coin,
@@ -229,12 +239,15 @@ public interface BinanceApiService {
       @Query("startTime") Long startTime,
       @Query("endTime") Long endTime,
       @Query("recvWindow") Long recvWindow,
-      @Query("timestamp") Long timestamp);
+      @Query("timestamp") Long timestamp
+  );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 10})
   @GET("/sapi/v1/capital/deposit/address")
-  Call<DepositAddress> getDepositAddress(@Query("coin") String asset, @Query("network")
-  String network, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  Call<DepositAddress> getDepositAddress(
+      @Query("coin") String asset, @Query("network") String network,
+      @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp
+  );
 
   /**
    * Get Dust transfer log.
@@ -246,7 +259,7 @@ public interface BinanceApiService {
    * @param timestamp  The current system timestamp
    * @return Log of dust transfers
    */
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/asset/dribblet")
   Call<DustTransferLog> getDustLog(
       @Query("startTime") Long startTime,
@@ -255,11 +268,15 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_UID + 10})
   @POST("/sapi/v1/asset/dust")
-  Call<DustTransferResponse> dustTransfer(@Query("asset") List<String> asset, @Query("recvWindow") Long recvWindow, @Query("timestamp") Long timestamp);
+  Call<DustTransferResponse> dustTransfer(
+      @Query("asset") List<String> asset,
+      @Query("recvWindow") Long recvWindow,
+      @Query("timestamp") Long timestamp
+  );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 5})
   @POST("/sapi/v3/asset/getUserAsset")
   Call<List<ExtendedAssetBalance>> getUserAssets(
       @Query("asset") String asset,
@@ -268,7 +285,7 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 10})
   @GET("/sapi/v1/asset/assetDividend")
   Call<AssetDividendHistory> getAssetDividendRecord(
       @Query("asset") String asset,
@@ -281,28 +298,28 @@ public interface BinanceApiService {
 
   // User stream endpoints
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
-  @POST("/api/v1/userDataStream")
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
+  @POST("/api/v3/userDataStream")
   Call<ListenKey> startUserDataStream();
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
-  @PUT("/api/v1/userDataStream")
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
+  @PUT("/api/v3/userDataStream")
   Call<Void> keepAliveUserDataStream(@Query("listenKey") String listenKey);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
-  @DELETE("/api/v1/userDataStream")
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
+  @DELETE("/api/v3/userDataStream")
   Call<Void> closeAliveUserDataStream(@Query("listenKey") String listenKey);
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @POST("/sapi/v1/userDataStream")
   Call<ListenKey> startMarginUserDataStream();
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_APIKEY_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @PUT("/sapi/v1/userDataStream")
   Call<Void> keepAliveMarginUserDataStream(@Query("listenKey") String listenKey);
 
   // Fiat endpoints
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_UID + 90000})
   @GET("/sapi/v1/fiat/orders")
   Call<FiatTransactionHistory> getFiatDepositOrWithdrawalHistory(
       @Query("transactionType") String transactionType, // 0: deposit; 1: withdrawal
@@ -314,7 +331,7 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/fiat/payments")
   Call<FiatPaymentHistory> getFiatPaymentHistory(
       @Query("transactionType") String transactionType, // 0: buy; 1: sell
@@ -344,7 +361,7 @@ public interface BinanceApiService {
    * @param timestamp
    * @return List of SavingsInterest objects
    */
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/lending/union/interestHistory")
   Call<List<SavingsInterest>> getSavingsInterestHistory(
       @Query("lendingType") String lendingType,
@@ -357,7 +374,7 @@ public interface BinanceApiService {
       @Query("timestamp") Long timestamp
   );
 
-  @Headers(BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER)
+  @Headers({BinanceApiConstants.ENDPOINT_SECURITY_TYPE_SIGNED_HEADER, SAPI_WEIGHT_PER_IP + 1})
   @GET("/sapi/v1/lending/union/account")
   Call<LendingAccountSummary> getLendingAccount(
       @Query("recvWindow") Long recvWindow,

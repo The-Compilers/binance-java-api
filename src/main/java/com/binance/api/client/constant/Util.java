@@ -93,4 +93,14 @@ public final class Util {
       throw new RuntimeException("Invalid time string: " + timeString);
     }
   }
+
+  /**
+   * Convert a unix timestamp into a human-readable string.
+   *
+   * @param timestamp Unix timestamp, including milliseconds
+   * @return A human-readable string
+   */
+  public static String humanReadableTimestamp(long timestamp) {
+    return dateFormat.format(new Date(timestamp));
+  }
 }

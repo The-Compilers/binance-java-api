@@ -1,8 +1,7 @@
 package com.binance.api.examples;
 
-import com.binance.api.client.BinanceApiAsyncRestClient;
-import com.binance.api.client.BinanceApiClientFactory;
 import com.binance.api.client.domain.account.Account;
+import com.binance.api.examples.helper.AuthenticatedAsyncExampleBase;
 
 /**
  * Examples on how to get account information.

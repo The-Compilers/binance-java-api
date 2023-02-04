@@ -56,26 +56,6 @@ public class AuthenticationInterceptor implements Interceptor {
     return chain.proceed(newRequest);
   }
 
-  /**
-   * Extracts the request body into a String.
-   *
-   * @return request body as a string
-   */
-  @SuppressWarnings("unused")
-  private static String bodyToString(RequestBody request) {
-    try (final Buffer buffer = new Buffer()) {
-      final RequestBody copy = request;
-      if (copy != null) {
-        copy.writeTo(buffer);
-      } else {
-        return "";
-      }
-      return buffer.readUtf8();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   @Override
   public boolean equals(final Object o) {
     if (this == o) return true;

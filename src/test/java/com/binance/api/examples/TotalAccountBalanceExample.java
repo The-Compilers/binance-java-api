@@ -3,6 +3,7 @@ package com.binance.api.examples;
 import com.binance.api.client.constant.Util;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.AssetBalance;
+import com.binance.api.examples.helper.AuthenticatedExampleBase;
 
 /**
  * Example how to get total of balances on your account

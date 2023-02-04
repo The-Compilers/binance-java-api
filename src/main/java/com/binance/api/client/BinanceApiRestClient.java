@@ -46,11 +46,6 @@ public interface BinanceApiRestClient {
    */
   ExchangeInfo getExchangeInfo();
 
-  /**
-   * @return All the supported assets and whether they can be withdrawn.
-   */
-  List<Asset> getAllAssets();
-
   // Market Data endpoints
 
   /**
@@ -133,21 +128,11 @@ public interface BinanceApiRestClient {
   List<TickerStatistics> getAll24HrPriceStatistics();
 
   /**
-   * Get the latest price for all symbols.
-   */
-  List<TickerPrice> getAllPrices();
-
-  /**
    * Get the latest price for <code>symbol</code>.
    *
    * @param symbol ticker symbol (e.g. ETHBTC)
    */
   TickerPrice getPrice(String symbol);
-
-  /**
-   * Get best price/qty on the order book for all symbols.
-   */
-  List<BookTicker> getBookTickers();
 
   // Account endpoints
 

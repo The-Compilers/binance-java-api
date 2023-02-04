@@ -3,6 +3,7 @@ package com.binance.api.client.impl;
 import com.binance.api.client.BinanceApiError;
 import com.binance.api.client.config.BinanceApiConfig;
 import com.binance.api.client.exception.BinanceApiException;
+import com.binance.api.client.limits.ApiLimitInterceptor;
 import com.binance.api.client.security.AuthenticationInterceptor;
 import okhttp3.Dispatcher;
 import okhttp3.OkHttpClient;
@@ -33,7 +34,8 @@ public class BinanceApiServiceGenerator {
     dispatcher.setMaxRequests(500);
     OkHttpClient.Builder builder = new OkHttpClient.Builder()
         .dispatcher(dispatcher)
-        .pingInterval(20, TimeUnit.SECONDS);
+        .pingInterval(20, TimeUnit.SECONDS)
+        .addInterceptor(new ApiLimitInterceptor());
     if (BinanceApiConfig.useHttpLogging) {
       builder.addInterceptor(createLoggingInterceptor());
     }
