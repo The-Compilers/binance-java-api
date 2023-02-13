@@ -31,7 +31,7 @@ public final class Util {
 
   public static final String BTC_TICKER = "BTC";
 
-  private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+  private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
   private Util() {
   }
